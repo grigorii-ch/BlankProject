@@ -51,9 +51,11 @@ public class Main {
         System.out.println("Получить последний элемент");
         System.out.println(storage.getLast());
 
-        System.out.println("Добавление 3 элементов");
+        System.out.println("Получание  3 элемента");
         System.out.println(storage.get(3));
         System.out.println(storage.toString());
+
+        storage.delete();
 
         System.out.println("Очистить");
         storage.clear();

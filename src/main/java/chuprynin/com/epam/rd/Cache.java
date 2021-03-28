@@ -28,9 +28,7 @@ public class Cache<T> {
      * @param element
      */
     public void add(T element, int index) {
-
         CacheElement cacheElement = new CacheElement(element, index);
-
         for (int i = 0; i < capacity; i++) {
             if (cache[i] == null) {
                 cache[i] = cacheElement;
@@ -69,7 +67,6 @@ public class Cache<T> {
         for (int i = position; i < capacity - 1; i++) {
             cache[i] = cache[i + 1];
         }
-
     }
 
     /**
@@ -95,8 +92,9 @@ public class Cache<T> {
      */
     public boolean isPresent(int index) {
         for (int i = 0; i < capacity; i++) {
-            if (index == cache[i].getIndex())
+            if (cache[i] != null && index == cache[i].getIndex()) {
                 return true;
+            }
         }
         return false;
     }
@@ -107,7 +105,7 @@ public class Cache<T> {
      * с учетом сдвига остальных элементов влево.
      *
      * @param index
-     * @return <T>
+     * @return T, null
      */
     @SuppressWarnings("unchecked")
     public T get(int index) {

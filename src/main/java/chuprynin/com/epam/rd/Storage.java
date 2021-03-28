@@ -5,12 +5,13 @@ import java.util.Arrays;
 public class Storage<T> {
     private Object[] storage;
     private Cache<T> cache;
-    private int capacity = 10;
+    private int capacity;
 
     /**
      * Дефолтный конструктор класса
      */
     public Storage() {
+        this.capacity = 10; // Значение по умолчанию
         this.storage = new Object[capacity];
         cache = new Cache<T>(capacity);
     }
@@ -22,7 +23,6 @@ public class Storage<T> {
      */
     public Storage(Object[] storage) {
         this.capacity = storage.length;
-
         this.storage = storage;
         cache = new Cache<T>(capacity);
     }
@@ -33,48 +33,44 @@ public class Storage<T> {
      * @param element
      */
     public void add(T element) {
-        boolean isFullStorage = true;
-
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == null) {
                 storage[i] = element;
-                isFullStorage = false;
-                break;
+                return;
             }
         }
+        increasLengthStorage(element);
+    }
 
-        if (isFullStorage) {
-            capacity = (int) (capacity * 1.5);
-            Object[] newStorage = new Object[capacity];
-
-            for (int i = 0; i < storage.length; i++) {
-                newStorage[i] = storage[i];
-            }
-
-            newStorage[storage.length] = element;
-            storage = newStorage;
+    /**
+     * Медол увеличение длинны массива в 1,5 раза
+     * @param element
+     */
+    private void increasLengthStorage(T element) {
+        capacity = (int) (capacity * 1.5);
+        Object[] newStorage = new Object[capacity];
+        for (int i = 0; i < storage.length; i++) {
+            newStorage[i] = storage[i];
         }
+        newStorage[storage.length] = element;
+        storage = newStorage;
     }
 
     /**
      * Удаление последнего элемента в кэше и массиве
      */
     public void delete() {
-        T tmpElement = null;
-        int tmpIdex = -1;
-
-        for (int i = storage.length - 1; i >= 0; i--) {
-            if (storage[i].equals(getLast())) {
-                tmpElement = (T) storage[i];
-                tmpIdex = i;
-                break;
-            }
-        }
+        T tmpElement = this.getLast();
 
         if (tmpElement != null) {
             if (cache.isPresent(tmpElement)) {
                 cache.delete(tmpElement);
-                storage[tmpIdex] = null;
+                for (int i = storage.length - 1; i >= 0; i--) {
+                    if (storage[i] != null && storage[i].equals(tmpElement)) {
+                        storage[i] = null;
+                        break;
+                    }
+                }
             }
         }
     }
@@ -84,12 +80,15 @@ public class Storage<T> {
      */
     public void clear() {
         cache.clear();
+        for(int i = 0; i < storage.length; i++) {
+            storage[i] = null;
+        }
     }
 
     /**
      * метод получения последнего элемента из массива
      *
-     * @return
+     * @return T, null
      */
     public T getLast() {
         for (int i = storage.length - 1; i >= 0; i--) {
@@ -105,27 +104,17 @@ public class Storage<T> {
      * Если объекта не оказалось в кэше, то берем объект из нашего массива, добавляем его в кэш и возвращаем.
      *
      * @param index
-     * @return
+     * @return T, null
      */
     public T get(int index) {
-        T tmpElement = null;
-
-        try {
-            tmpElement = cache.get(index);
-            return tmpElement;
-        } catch (Exception e) {
-            System.out.println("В кэше отсутсвует елемент с индеком " + index + " ищем в хранилище");
+        if (cache.isPresent(index)) {
+            return cache.get(index);
         }
-
         if (capacity < index) {
-            System.out.println("В хранилище отсутсвует елемент с индеком " + index);
             return null;
-
-        } else {
-            tmpElement = (T) storage[index];
-            cache.add((T) tmpElement, index);
-            return tmpElement;
         }
+        cache.add((T) storage[index], index);
+        return (T) storage[index];
     }
 
     @Override
