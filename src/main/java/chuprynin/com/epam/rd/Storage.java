@@ -61,15 +61,19 @@ public class Storage<T> {
      */
     public void delete() {
         T tmpElement = this.getLast();
-        if (tmpElement != null) {
-            if (cache.isPresent(tmpElement)) {
-                cache.delete(tmpElement);
-            }
-            for (int i = storage.length - 1; i >= 0; i--) {
-                if (storage[i] != null && storage[i].equals(tmpElement)) {
-                    storage[i] = null;
-                    return;
-                }
+
+        if (tmpElement == null) {
+            return;
+        }
+
+        if (cache.isPresent(tmpElement)) {
+            cache.delete(tmpElement);
+        }
+
+        for (int i = storage.length - 1; i >= 0; i--) {
+            if (storage[i] != null && storage[i].equals(tmpElement)) {
+                storage[i] = null;
+                return;
             }
         }
     }
