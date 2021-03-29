@@ -110,8 +110,7 @@ public class Cache<T> {
     public T get(int index) {
         for (int i = 0; i < capacity; i++) {
             if (index == cache[i].getIndex()) {
-                CacheElement foundedElement;
-                foundedElement = cache[i];
+                CacheElement foundedElement = cache[i];
                 moveSubRangeToLeft(i);
                 cache[capacity - 1] = foundedElement;
                 return (T) foundedElement.getElement();

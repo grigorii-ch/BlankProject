@@ -68,7 +68,7 @@ public class Storage<T> {
             for (int i = storage.length - 1; i >= 0; i--) {
                 if (storage[i] != null && storage[i].equals(tmpElement)) {
                     storage[i] = null;
-                    break;
+                    return;
                 }
             }
         }
