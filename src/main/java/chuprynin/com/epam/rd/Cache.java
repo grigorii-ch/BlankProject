@@ -37,7 +37,6 @@ public class Cache<T> {
         }
         moveSubRangeToLeft(0);
         cache[capacity - 1] = cacheElement;
-
     }
 
     /**
@@ -52,7 +51,7 @@ public class Cache<T> {
                 if (element.equals(cache[i].getElement())) {
                     moveSubRangeToLeft(i);
                     cache[capacity - 1] = null;
-                    break;
+                    return;
                 }
             }
         }
@@ -109,9 +108,9 @@ public class Cache<T> {
      */
     @SuppressWarnings("unchecked")
     public T get(int index) {
-        CacheElement foundedElement;
         for (int i = 0; i < capacity; i++) {
             if (index == cache[i].getIndex()) {
+                CacheElement foundedElement;
                 foundedElement = cache[i];
                 moveSubRangeToLeft(i);
                 cache[capacity - 1] = foundedElement;

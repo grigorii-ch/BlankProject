@@ -39,14 +39,14 @@ public class Storage<T> {
                 return;
             }
         }
-        increasLengthStorage(element);
+        increaseLengthStorage(element);
     }
 
     /**
      * Медол увеличение длинны массива в 1,5 раза
      * @param element
      */
-    private void increasLengthStorage(T element) {
+    private void increaseLengthStorage(T element) {
         capacity = (int) (capacity * 1.5);
         Object[] newStorage = new Object[capacity];
         for (int i = 0; i < storage.length; i++) {
@@ -61,15 +61,14 @@ public class Storage<T> {
      */
     public void delete() {
         T tmpElement = this.getLast();
-
         if (tmpElement != null) {
             if (cache.isPresent(tmpElement)) {
                 cache.delete(tmpElement);
-                for (int i = storage.length - 1; i >= 0; i--) {
-                    if (storage[i] != null && storage[i].equals(tmpElement)) {
-                        storage[i] = null;
-                        break;
-                    }
+            }
+            for (int i = storage.length - 1; i >= 0; i--) {
+                if (storage[i] != null && storage[i].equals(tmpElement)) {
+                    storage[i] = null;
+                    break;
                 }
             }
         }
