@@ -1,8 +1,11 @@
-package chuprynin.com.epam.rd;
+package chuprynin.com.epam.rd.human;
 
 import java.util.Objects;
 
-public class Human{
+/**
+ * Класс описывает сущность Человек
+ */
+public class Human {
     private String fio;
     private int age;
     private Address address;
@@ -23,6 +26,10 @@ public class Human{
 
     public Address getAddress() {
         return address;
+    }
+
+    public String getAdressString() {
+        return this.address.toString();
     }
 
     @Override

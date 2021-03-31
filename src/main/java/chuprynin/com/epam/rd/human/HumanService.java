@@ -1,14 +1,19 @@
-package chuprynin.com.epam.rd;
+package chuprynin.com.epam.rd.human;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class Services{
-    public void ArrayService() {
-        ArrayList<Human> humanList = new ArrayList<>();
+/**
+ * Класс для работы сущностью Human
+ */
+public class HumanService {
+    private ArrayList<Human> humanList = new ArrayList<>();
 
+    /**
+     * Конструктор класса с заполнением дефолтных значений массива
+     */
+    public HumanService() {
         humanList.add(new Human("Бот4", 104,
                 new Address("Сервер4", "root/home4", 4, 4)));
         humanList.add(new Human("Иванов Иван Иванович", 32,
@@ -29,38 +34,44 @@ public class Services{
                 new Address("Сервер3", "root/home3", 3, 3)));
         humanList.add(new Human("Сидоров Сидр Сидорович", 34,
                 new Address("Самара", "Матроспва", 4, 5)));
+    }
 
-        System.out.println("Выводим список людей \n");
-        for (Human human : humanList) {
-            System.out.println(human.toString());
-        }
+    /**
+     * Метод для демонстрации работы c сущностью Human
+     */
+    public void service() {
+        print("Выводим заполненный список");
 
-        System.out.println("\nВыводим дубли и даляем \n");
+        System.out.println("\nВыводим дубли и удаляем");
         for (int i = 0; i < humanList.size(); i++) {
-            if (humanList.subList(i + 1, humanList.size()).contains(humanList.get(i))) {
+            if (i != humanList.size()-1 &&
+                    humanList.subList(i + 1, humanList.size()).contains(humanList.get(i))) {
                 System.out.println(humanList.get(i));
                 humanList.remove(i);
             }
         }
 
-        System.out.println("\nCписок людей без дублей \n");
+        print("\nCписок людей без дублей");
+
+        Collections.sort(humanList, Comparator.comparing(obj -> obj.getFio()));
+        print("\nCписок людей с сортиповкой по ФИО");
+
+        Collections.sort(humanList, Comparator.comparing(Human::getAge));
+        print("\nCписок людей с сортиповкой по Возрасту");
+
+        Collections.sort(humanList, Comparator.comparing(obj -> obj.getAddress().toString()));
+        print("\nCписок людей с сортиповкой по Адресу");
+    }
+
+    /**
+     * Вывод сообщения и массива
+     *
+     * @param title
+     */
+    private void print(String title) {
+        System.out.println(title);
         for (Human human : humanList) {
             System.out.println(human.toString());
         }
-
-        Comparator<Human> comparatorFio = Comparator.comparing(Human::getFio);
-        System.out.println("\nCписок людей с сортиповкой по ФИО \n");
-        Collections.sort(humanList, comparatorFio);
-        for (Human human : humanList) {
-            System.out.println(human.toString());
-        }
-
-        Comparator<Human> comparatorAge = Comparator.comparing(Human::getAge);
-        System.out.println("\nCписок людей с сортиповкой по Возрасту \n");
-        Collections.sort(humanList, comparatorAge);
-        for (Human human : humanList) {
-            System.out.println(human.toString());
-        }
-
     }
 }

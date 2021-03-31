@@ -1,13 +1,24 @@
-package chuprynin.com.epam.rd;
+package chuprynin.com.epam.rd.human;
 
 import java.util.Objects;
 
+/**
+ * Класс описывает сущность Адрес
+ */
 public class Address {
     private String city;
     private String street;
     private int house;
     private int apartment;
 
+    /**
+     * Конструктор
+     *
+     * @param city
+     * @param street
+     * @param house
+     * @param apartment
+     */
     public Address(String city, String street, int house, int apartment) {
         this.city = city;
         this.street = street;
