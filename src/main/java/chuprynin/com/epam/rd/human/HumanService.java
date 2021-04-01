@@ -8,12 +8,14 @@ import java.util.Comparator;
  * Класс для работы сущностью Human
  */
 public class HumanService {
-    private ArrayList<Human> humanList = new ArrayList<>();
-
     /**
-     * Конструктор класса с заполнением дефолтных значений массива
+     * Возвращает ArrayList с 10 элементами класс Human
+     *
+     * @return ArrayList<Human>
      */
-    public HumanService() {
+    public ArrayList<Human> getFillHumanList() {
+        ArrayList<Human> humanList = new ArrayList<>();
+
         humanList.add(new Human("Бот4", 104,
                 new Address("Сервер4", "root/home4", 4, 4)));
         humanList.add(new Human("Иванов Иван Иванович", 32,
@@ -34,42 +36,75 @@ public class HumanService {
                 new Address("Сервер3", "root/home3", 3, 3)));
         humanList.add(new Human("Сидоров Сидр Сидорович", 34,
                 new Address("Самара", "Матроспва", 4, 5)));
+
+        return humanList;
     }
 
     /**
-     * Метод для демонстрации работы c сущностью Human
+     * Найти дубли в коллекции и вывести их в консоль.
+     *
+     * @param humanList
      */
-    public void service() {
-        print("Выводим заполненный список");
-
-        System.out.println("\nВыводим дубли и удаляем");
+    public void findDubles(ArrayList<Human> humanList) {
         for (int i = 0; i < humanList.size(); i++) {
-            if (i != humanList.size()-1 &&
+            if (i != humanList.size() - 1 &&
                     humanList.subList(i + 1, humanList.size()).contains(humanList.get(i))) {
                 System.out.println(humanList.get(i));
+            }
+        }
+    }
+
+    /**
+     * Удалить дубли из коллекции
+     *
+     * @param humanList
+     */
+    public ArrayList<Human> removeDubles(ArrayList<Human> humanList) {
+        for (int i = 0; i < humanList.size(); i++) {
+            if (i != humanList.size() - 1 &&
+                    humanList.subList(i + 1, humanList.size()).contains(humanList.get(i))) {
                 humanList.remove(i);
             }
         }
-
-        print("\nCписок людей без дублей");
-
-        Collections.sort(humanList, Comparator.comparing(obj -> obj.getFio()));
-        print("\nCписок людей с сортиповкой по ФИО");
-
-        Collections.sort(humanList, Comparator.comparing(Human::getAge));
-        print("\nCписок людей с сортиповкой по Возрасту");
-
-        Collections.sort(humanList, Comparator.comparing(obj -> obj.getAddress().toString()));
-        print("\nCписок людей с сортиповкой по Адресу");
+        return humanList;
     }
 
     /**
-     * Вывод сообщения и массива
+     * Отсортировать людей по ФИО
      *
-     * @param title
+     * @param humanList
      */
-    private void print(String title) {
-        System.out.println(title);
+    public void sortByFio(ArrayList<Human> humanList) {
+        Collections.sort(humanList, Comparator.comparing(obj -> obj.getFio()));
+        print(humanList);
+    }
+
+    /**
+     * Отсортировать людей по возрасту
+     *
+     * @param humanList
+     */
+    public void sortByAge(ArrayList<Human> humanList) {
+        Collections.sort(humanList, Comparator.comparing(Human::getAge));
+        print(humanList);
+    }
+
+    /**
+     * Отсортировать людей по адресу (лексикографическая сортировка полного адреса)
+     *
+     * @param humanList
+     */
+    public void sortByAddress(ArrayList<Human> humanList) {
+        Collections.sort(humanList, Comparator.comparing(obj -> obj.getAddress().toString()));
+        print(humanList);
+    }
+
+    /**
+     * Печатаем ArrayList
+     *
+     * @param humanList
+     */
+    private void print(ArrayList<Human> humanList) {
         for (Human human : humanList) {
             System.out.println(human.toString());
         }

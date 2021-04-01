@@ -1,18 +1,17 @@
 package chuprynin.com.epam.rd.map;
 
-
 import java.util.*;
 
 /**
  * Класс заполняет Map<K,V> выводит результат
  */
 public class MapService {
-    Map map = new HashMap<Integer, String>();
-
     /**
      * Конструктор с дефолтным заполнением мапы.
      */
-    public MapService() {
+    public HashMap getFillMap() {
+        HashMap map = new HashMap<Integer, String>();
+
         map.put(150, "один");
         map.put(95, "два");
         map.put(45, "три");
@@ -23,49 +22,40 @@ public class MapService {
         map.put(78, "восемь");
         map.put(987, "девять");
         map.put(12, "десять");
+
+        return map;
     }
 
     /**
-     * Метод для демонстрации работы
-     */
-    public void service() {
-        print("Вывод первоначальной мапы", map);
-
-        TreeMap<Integer, String> treeMap = new TreeMap<>();
-        treeMap.putAll(map);
-        print("Вывод с сортировкой по ключу", treeMap);
-
-        System.out.println("Вывод с сортировакой по значению");
-        Iterator iterator = valueIterator(treeMap);
-        while (iterator.hasNext()) {
-            System.out.println(iterator.next().toString());
-        }
-    }
-
-    /**
-     * Мето для сортировки TreeMap по значению, возращает
+     * Сортировка по ключу
      *
      * @param map
-     * @return Iterator
      */
-    private Iterator valueIterator(TreeMap map) {
-        Set set = new TreeSet(new Comparator<Map.Entry<Integer, String>>() {
-            @Override
-            public int compare(Map.Entry<Integer, String> o1, Map.Entry<Integer, String> o2) {
-                return o1.getValue().compareTo(o2.getValue()) > 0 ? 1 : -1;
-            }
-        });
-        set.addAll(map.entrySet());
-        return set.iterator();
+    public void sortByKey(HashMap<Integer, String> map) {
+        TreeMap<Integer, String> treeMap = new TreeMap<>();
+        treeMap.putAll(map);
+
+        System.out.println(treeMap.toString());
     }
 
     /**
-     * Метод для вывода данных
+     * Сортировка по зевченмю
      *
-     * @param title
-     * @param m
+     * @param map
      */
-    private void print(String title, Map m) {
-        System.out.println(title + m.toString());
+    public void sortByValue(HashMap<Integer, String> map) {
+        SortedSet<String> sortedSet = new TreeSet<>();
+
+        for(Map.Entry<Integer, String> entry : map.entrySet()) {
+            sortedSet.add(entry.getValue());
+        }
+
+        for (String s: sortedSet) {
+            for(Map.Entry<Integer, String> entry : map.entrySet()) {
+                if (s.equals(entry.getValue())){
+                    System.out.println(entry.toString());
+                }
+            }
+        }
     }
 }
