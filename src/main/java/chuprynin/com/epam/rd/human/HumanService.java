@@ -1,8 +1,6 @@
 package chuprynin.com.epam.rd.human;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 /**
  * Класс для работы сущностью Human
@@ -59,11 +57,10 @@ public class HumanService {
      * @param humanList
      */
     public ArrayList<Human> removeDubles(ArrayList<Human> humanList) {
-        for (int i = 0; i < humanList.size(); i++) {
-            if (!ifDubles(humanList.get(i), humanList)){
-                humanList.remove(i);
-            }
-        }
+        Set set = new HashSet(humanList);
+        humanList.clear();
+        humanList.addAll(set);
+
         return humanList;
     }
 
