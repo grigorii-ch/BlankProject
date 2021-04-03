@@ -44,9 +44,10 @@ public class HumanService {
      * @param humanList
      */
     public void findDubles(ArrayList<Human> humanList) {
-        for (int i = 0; i < humanList.size(); i++) {
-            if (!ifDubles(humanList.get(i), humanList)){
-                System.out.println(humanList.get(i));
+        HashSet set = new HashSet();
+        for (Human human : humanList) {
+            if(!set.add(human)) {
+                System.out.println(human);
             }
         }
     }
