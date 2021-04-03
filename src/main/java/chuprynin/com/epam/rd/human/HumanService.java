@@ -47,8 +47,7 @@ public class HumanService {
      */
     public void findDubles(ArrayList<Human> humanList) {
         for (int i = 0; i < humanList.size(); i++) {
-            if (i != humanList.size() - 1 &&
-                    humanList.subList(i + 1, humanList.size()).contains(humanList.get(i))) {
+            if (!ifDubles(humanList.get(i), humanList)){
                 System.out.println(humanList.get(i));
             }
         }
@@ -61,8 +60,7 @@ public class HumanService {
      */
     public ArrayList<Human> removeDubles(ArrayList<Human> humanList) {
         for (int i = 0; i < humanList.size(); i++) {
-            if (i != humanList.size() - 1 &&
-                    humanList.subList(i + 1, humanList.size()).contains(humanList.get(i))) {
+            if (!ifDubles(humanList.get(i), humanList)){
                 humanList.remove(i);
             }
         }
@@ -77,6 +75,16 @@ public class HumanService {
     public void sortByFio(ArrayList<Human> humanList) {
         Collections.sort(humanList, Comparator.comparing(obj -> obj.getFio()));
         print(humanList);
+    }
+
+    /**
+     * Проверка элемента в массиве на дабликаты
+     * @param element
+     * @param humanList
+     * @return boolean
+     */
+    private boolean ifDubles(Human element, ArrayList<Human> humanList){
+        return humanList.indexOf(element) == humanList.lastIndexOf(element);
     }
 
     /**
