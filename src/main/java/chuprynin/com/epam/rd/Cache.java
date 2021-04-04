@@ -1,5 +1,7 @@
 package chuprynin.com.epam.rd;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Arrays;
 
 /**
@@ -7,6 +9,7 @@ import java.util.Arrays;
  *
  * @param <T>
  */
+@Slf4j
 public class Cache<T> {
     private CacheElement<T>[] cache;
     private int capacity;
@@ -19,6 +22,7 @@ public class Cache<T> {
     public Cache(int capacity) {
         this.capacity = capacity;
         cache = new CacheElement[this.capacity];
+        log.debug(String.format("Создан обьект %s, с длиной массива %d", this.getClass().getName(), capacity));
     }
 
     /**
@@ -27,16 +31,24 @@ public class Cache<T> {
      *
      * @param element
      */
-    public void add(T element, int index) {
+    public void add(T element, int index) throws CheckedNoSuchElementException {
+        if (element == null) {
+            log.warn("Добавляемый елемент не должен быть null");
+            throw new CheckedNoSuchElementException("Добавляемый елемент/обьект не должен быть null ");
+        }
+
         CacheElement cacheElement = new CacheElement(element, index);
+
         for (int i = 0; i < capacity; i++) {
             if (cache[i] == null) {
                 cache[i] = cacheElement;
+                log.debug(String.format("Обьект %s c индексом %d добавлен в %d позицию, ", element, index, i-1));
                 return;
             }
         }
         moveSubRangeToLeft(0);
         cache[capacity - 1] = cacheElement;
+        log.debug(String.format("Обьект %s c индексом %d добавлен в конец - %d позицию, ", element, index, capacity - 1));
     }
 
     /**
@@ -51,6 +63,7 @@ public class Cache<T> {
                 if (element.equals(cache[i].getElement())) {
                     moveSubRangeToLeft(i);
                     cache[capacity - 1] = null;
+                    log.debug(String.format("Элемент %s был удален", element));
                     return;
                 }
             }
@@ -63,8 +76,12 @@ public class Cache<T> {
      * @param position
      */
     private void moveSubRangeToLeft(int position) {
-        for (int i = position; i < capacity - 1; i++) {
-            cache[i] = cache[i + 1];
+        try {
+            for (int i = position; i < capacity - 1; i++) {
+                cache[i] = cache[i + 1];
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            log.warn(String.format("Ошибка в методе %s при добавлении элемента в Cache : %s", "moveSubRangeToLeft", e.getMessage()));
         }
     }
 
@@ -77,9 +94,11 @@ public class Cache<T> {
     public boolean isPresent(T element) {
         for (int i = 0; i < capacity; i++) {
             if (cache[i] != null && element.equals(cache[i].getElement())) {
+                log.debug("Данный элемент %s, был найден в массиве с длинной %d", element, capacity);
                 return true;
             }
         }
+        log.debug("Данный элемент %s, не был найден в массиве с длинной %d", element, capacity);
         return false;
     }
 
@@ -92,9 +111,11 @@ public class Cache<T> {
     public boolean isPresent(int index) {
         for (int i = 0; i < capacity; i++) {
             if (cache[i] != null && index == cache[i].getIndex()) {
+                log.debug("Элемент с индексом %d, был найден в массиве с длинной %d", index, capacity);
                 return true;
             }
         }
+        log.debug("Элемент с индексом %d, не был найден в массиве с длинной %d", index, capacity);
         return false;
     }
 
@@ -109,11 +130,16 @@ public class Cache<T> {
     @SuppressWarnings("unchecked")
     public T get(int index) {
         for (int i = 0; i < capacity; i++) {
-            if (index == cache[i].getIndex()) {
-                CacheElement foundedElement = cache[i];
-                moveSubRangeToLeft(i);
-                cache[capacity - 1] = foundedElement;
-                return (T) foundedElement.getElement();
+            try {
+                if (index == cache[i].getIndex()) {
+                    CacheElement foundedElement = cache[i];
+                    moveSubRangeToLeft(i);
+                    cache[capacity - 1] = foundedElement;
+                    return (T) foundedElement.getElement();
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                log.warn(String.format("Ошибка в методе %s при добавлении элемента в Cache : %s", "get", e.getMessage()));
+                return null;
             }
         }
         return null;
