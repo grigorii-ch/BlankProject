@@ -121,7 +121,7 @@ public class Storage<T> {
                 }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn("Ошибка в методе {}} : {}", "delete", e.getMessage());
+            log.warn("Ошибка в методе {} : {}", "delete", e.getMessage());
         }
     }
 
