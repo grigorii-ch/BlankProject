@@ -3,8 +3,8 @@ package chuprynin.com.epam.rd;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class UncheckedNullPointerException extends RuntimeException {
-    public UncheckedNullPointerException(String message) {
+public class StorageElementNotExists extends RuntimeException {
+    public StorageElementNotExists(String message) {
         super(message);
     }
 
@@ -14,7 +14,7 @@ public class UncheckedNullPointerException extends RuntimeException {
         return sw.toString();
     }
 
-    public UncheckedNullPointerException() {
+    public StorageElementNotExists() {
         super("Ошибка UncheckedNullPointerException");
     }
 }

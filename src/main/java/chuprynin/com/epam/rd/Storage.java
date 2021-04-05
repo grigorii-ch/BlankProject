@@ -17,7 +17,7 @@ public class Storage<T> {
         this.capacity = 10; // Значение по умолчанию
         this.storage = new Object[capacity];
         cache = new Cache<T>(capacity);
-        log.debug(String.format("Создан обьект %s, c элементоми  Object[%d], Cache<T>(%d) ", this.getClass().getName(), capacity, capacity));
+        log.debug("Создан обьект {}, c элементоми  Object[{}], Cache<T>({}) ", this.getClass().getName(), capacity, capacity);
     }
 
     /**
@@ -29,7 +29,7 @@ public class Storage<T> {
         this.capacity = storage.length;
         this.storage = storage;
         cache = new Cache<T>(capacity);
-        log.debug(String.format("Создан обьект %s, c элементоми  Object[%d], Cache<T>(%d) ", this.getClass().getName(), capacity, capacity));
+        log.debug("Создан обьект {}, c элементоми  Object[{}], Cache<T>({}) ", this.getClass().getName(), capacity, capacity);
     }
 
     /**
@@ -37,16 +37,16 @@ public class Storage<T> {
      *
      * @param element
      */
-    public void add(T element) throws UncheckedNullPointerException {
+    public void add(T element) throws StorageElementNotExists {
         if (element == null) {
             log.warn("Добавляемый елемент не должен быть null");
-            throw new UncheckedNullPointerException("Добавляемый елемент не должен быть null ");
+            throw new StorageElementNotExists("Добавляемый елемент не должен быть null ");
         }
 
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == null) {
                 storage[i] = element;
-                log.debug(String.format("Элемент %s добавлен в свободную ячейку", element));
+                log.debug("Элемент {} добавлен в свободную ячейку", element);
                 return;
             }
         }
@@ -67,9 +67,9 @@ public class Storage<T> {
             }
             newStorage[storage.length] = element;
             storage = newStorage;
-            log.debug(String.format("Массив увеличен до %d, Элемент  добавн в первую свободную ячейку", capacity, element));
+            log.debug("Массив увеличен до {}, Элемент {} добавн в первую свободную ячейку", capacity, element);
         } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn(String.format("Ошибка в методе %s : %s, элемент %s не был добавлен", "increaseLengthStorage", e.getMessage(), element));
+            log.warn("Ошибка в методе {}} : {}, элемент {} не был добавлен", "increaseLengthStorage", e.getMessage(), element);
         }
     }
 
@@ -85,19 +85,19 @@ public class Storage<T> {
 
         if (cache.isPresent(tmpElement)) {
             cache.delete(tmpElement);
-            log.debug(String.format("Элемент %s удален из cache",tmpElement));
+            log.debug("Элемент {} удален из cache", tmpElement);
         }
 
         try {
             for (int i = storage.length - 1; i >= 0; i--) {
                 if (storage[i] != null && storage[i].equals(tmpElement)) {
                     storage[i] = null;
-                    log.debug(String.format("Элемент %s удален из storage",tmpElement));
+                    log.debug("Элемент {} удален из storage",tmpElement);
                     return;
                 }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn(String.format("Ошибка в методе %s : %s", "delete", e.getMessage()));
+            log.warn("Ошибка в методе {}} : {}", "delete", e.getMessage());
         }
     }
 
@@ -143,8 +143,8 @@ public class Storage<T> {
         try {
             cache.add((T) storage[index], index);
             return (T) storage[index];
-        } catch (CheckedNoSuchElementException e) {
-            log.warn(String.format("Ошибка при получании элемента из массива по индексу %d", index));
+        } catch (CacheElementNotExists e) {
+            log.warn("Ошибка при получании элемента из массива по индексу {}", index);
             return null;
         }
     }

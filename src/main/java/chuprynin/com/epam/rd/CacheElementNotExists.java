@@ -5,12 +5,12 @@ import java.io.StringWriter;
 import java.rmi.NoSuchObjectException;
 import java.util.NoSuchElementException;
 
-public class CheckedNoSuchElementException extends Exception {
-    public CheckedNoSuchElementException(String message) {
+public class CacheElementNotExists extends Exception {
+    public CacheElementNotExists(String message) {
         super(message);
     }
 
-    public CheckedNoSuchElementException() {
+    public CacheElementNotExists() {
         super("CheckedNoSuchElementException");
     }
 
