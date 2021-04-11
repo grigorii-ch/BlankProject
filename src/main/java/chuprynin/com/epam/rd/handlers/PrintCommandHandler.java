@@ -15,11 +15,6 @@ import java.util.ArrayList;
 
 @Slf4j
 public class PrintCommandHandler implements CommandHandler {
-    private String fileName;
-    private int lineNumber = -1;
-
-    private Lesson5Hepler hepler;
-
     /**
      * Конструктор
      */
@@ -27,39 +22,9 @@ public class PrintCommandHandler implements CommandHandler {
     }
 
     /**
-     * Парсинг команды
-     * @return
-     */
-    private boolean parseCommand(ArrayList<String> printCommandList) {
-        try {
-            if (hepler.isDigit(printCommandList.get(1))) {
-                lineNumber = Integer.valueOf(printCommandList.get(1));
-                fileName = printCommandList.get(2);
-
-                log.debug("lineNumber = {}, fileName = {}",lineNumber ,fileName);
-                hepler.validate(printCommandList);
-
-                return true;
-            }
-            fileName = printCommandList.get(1);
-            log.debug("lineNumber = {}, fileName = {}",lineNumber ,fileName);
-
-            hepler.validate(printCommandList);
-
-            return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn("Ошибка ArrayIndexOutOfBoundsException {}", e.getMessage());
-            return false;
-        } catch (RuntimeException e) {
-            log.warn("Ошибка RuntimeException {}", e.getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Вывод результата
      */
-    private void print() {
+    private void print(Lesson5Hepler hepler, String fileName, int lineNumber) {
         ArrayList<String> printList = hepler.readFile(fileName);
 
         if ((lineNumber == -1) || (lineNumber > printList.size()-1)) {
@@ -73,22 +38,18 @@ public class PrintCommandHandler implements CommandHandler {
 
     @Override
     public void handle(ArrayList<String> printArray) {
-        hepler = new Lesson5Hepler();
+        Lesson5Hepler hepler = new Lesson5Hepler();
+        int lineNumber = -1;
+        String fileName = printArray.get(1);
 
-        log.debug("Команда {}", Commands.PRINT.getValue());
-        if (parseCommand(printArray)) {
-            print();
-            return;
+        if (hepler.isDigit(printArray.get(1))) {
+            lineNumber = Integer.valueOf(printArray.get(1));
+            fileName = printArray.get(2);
         }
-        return;
-    }
 
-    @Override
-    public String toString() {
-        return "PrintCommandHandler{" +
-                ", fileName='" + fileName + '\'' +
-                ", lineNumber=" + lineNumber +
-                ", hepler=" + hepler +
-                '}';
+        log.debug("Команда {}", printArray.get(0));
+        log.debug("lineNumber = {}, fileName = {}", lineNumber, fileName);
+
+        print(hepler, fileName, lineNumber);
     }
 }

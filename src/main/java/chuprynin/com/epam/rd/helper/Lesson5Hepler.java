@@ -73,31 +73,58 @@ public class Lesson5Hepler {
 
         ArrayList<String> strings = readFile(fileName);
 
-        if (strings.size() == 0) {
-            System.out.println("Создаем файл.");
+        if (operation.equals(Commands.ADD.getValue())) {
+            strings = prepareStringsAddOpperation(lineNumber, text, operation, strings);
         }
-
-            if (operation.equals(Commands.ADD.getValue())) {
-                if (lineNumber == -1) {
-                    strings.add(text);
-                } else {
-                    strings = changeArray(strings, lineNumber, text, operation);
-                }
-            }
 
         if (operation.equals(Commands.DELETE.getValue())) {
-            if (lineNumber == -1 || lineNumber >= strings.size() - 1) {
-                try {
-                    strings.remove(strings.size() - 1);
-
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    log.warn("ArrayIndexOutOfBoundsException: {}", e.getMessage());
-                }
-            } else {
-                strings.remove(lineNumber - 1);
-            }
+            prepareStringsDelleteOpperation(lineNumber, strings);
         }
 
+        write(fileName, strings);
+    }
+
+    /**
+     * Формирование текста с учетом удаляемой строки
+     * @param lineNumber
+     * @param strings
+     */
+    private void prepareStringsDelleteOpperation(int lineNumber, ArrayList<String> strings) {
+        if (lineNumber == -1 || lineNumber >= strings.size() - 1) {
+            try {
+                strings.remove(strings.size() - 1);
+
+            } catch (ArrayIndexOutOfBoundsException e) {
+                log.warn("ArrayIndexOutOfBoundsException: {}", e.getMessage());
+            }
+        } else {
+            strings.remove(lineNumber - 1);
+        }
+    }
+
+    /**
+     * Формирование текста с определение позици добовляемой строки
+     * @param lineNumber
+     * @param text
+     * @param operation
+     * @param strings
+     * @return
+     */
+    private ArrayList<String> prepareStringsAddOpperation(int lineNumber, String text, String operation, ArrayList<String> strings) {
+        if (lineNumber == -1) {
+            strings.add(text);
+        } else {
+            strings = changeArray(strings, lineNumber, text, operation);
+        }
+        return strings;
+    }
+
+    /**
+     * Записываем в файл
+     * @param fileName
+     * @param strings
+     */
+    private void write(String fileName, ArrayList<String> strings) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             log.debug("Запись в файл {}", fileName);
 
@@ -132,6 +159,7 @@ public class Lesson5Hepler {
                 return strings;
             }
 
+            System.out.println("Создаем файл.");
             br = new BufferedReader(new FileReader(file));
 
             String s;

@@ -16,12 +16,16 @@ import java.util.Map;
 @Slf4j
 public class CommandFilter {
     private boolean endProgram;
-    private String command;
+    Map mapHandler = new HashMap<String,CommandHandler>();
 
     /**
      * Конструктор
      */
     public CommandFilter() {
+        mapHandler.put(Commands.ADD.getValue(),new AddCommandHandler());
+        mapHandler.put(Commands.DELETE.getValue(),new DeleteCommandHandler());
+        mapHandler.put(Commands.PRINT.getValue(),new PrintCommandHandler());
+
         this.endProgram = false;
     }
 
@@ -31,19 +35,6 @@ public class CommandFilter {
      */
     public boolean isEndProgram() {
         return endProgram;
-    }
-
-    static CommandHandler getHandler(String command) {
-        AddCommandHandler addHandler = new AddCommandHandler();
-        DeleteCommandHandler deleteHandler = new DeleteCommandHandler();
-        PrintCommandHandler printHandler = new PrintCommandHandler();
-
-        Map mapHandler = new HashMap<String,CommandHandler>();
-        mapHandler.put(Commands.ADD.getValue(),addHandler);
-        mapHandler.put(Commands.DELETE.getValue(),deleteHandler);
-        mapHandler.put(Commands.PRINT.getValue(),printHandler);
-
-        return (CommandHandler) mapHandler.get(command);
     }
 
     /**
@@ -63,7 +54,7 @@ public class CommandFilter {
         }
 
         try {
-            CommandHandler handler = getHandler(parseCommand.get(0));
+            CommandHandler handler = (CommandHandler) mapHandler.get(parseCommand.get(0));
             handler.handle(parseCommand);
         } catch (NullPointerException e) {
             log.warn("Ошибка {},  NullPointerException {}", "Не удалось определить команду", e.getMessage());

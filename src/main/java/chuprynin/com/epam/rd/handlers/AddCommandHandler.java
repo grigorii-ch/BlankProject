@@ -3,7 +3,6 @@ package chuprynin.com.epam.rd.handlers;
 import chuprynin.com.epam.rd.emums.Commands;
 import chuprynin.com.epam.rd.helper.Lesson5Hepler;
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.ArrayList;
 
 /**
@@ -18,13 +17,6 @@ import java.util.ArrayList;
 
 @Slf4j
 public class AddCommandHandler implements CommandHandler {
-    private String fileName;
-    private int lineNumber = -1;
-    private String text;
-    private final String command = Commands.ADD.getValue();
-
-    private Lesson5Hepler hepler;
-
     /**
      * Конструктор
      */
@@ -34,7 +26,7 @@ public class AddCommandHandler implements CommandHandler {
     /**
      * Сохранение данных
      */
-    private void save() {
+    private void save(Lesson5Hepler hepler, String fileName, int lineNumber, String text, String command) {
         hepler.writeToFile(fileName, lineNumber, text, command);
     }
 
@@ -43,69 +35,38 @@ public class AddCommandHandler implements CommandHandler {
      *
      * @throws RuntimeException
      */
-    private void validate() throws RuntimeException {
+    private void validate(String text) throws RuntimeException {
         if (!(text.indexOf("\"") == 0) || !(text.lastIndexOf("\"") == text.length() - 1)) {
-            // log
             throw new RuntimeException("Команда add имеет не верный формат: текст - введент без ковычек");
-        }
-    }
-
-    /**
-     * Парсинг команды
-     *
-     * @return
-     */
-    private boolean parseCommand(ArrayList<String> addCommandList) {
-        try {
-            if (hepler.isDigit(addCommandList.get(1))) {
-                lineNumber = Integer.valueOf(addCommandList.get(1));
-                fileName = addCommandList.get(2);
-                text = addCommandList.get(3);
-
-                validate();
-
-                log.debug("lineNumber = {}, fileName = {}, text = {}", lineNumber, fileName, text);
-                return true;
-            }
-            fileName = addCommandList.get(1);
-            text = addCommandList.get(2);
-
-            validate();
-
-            log.debug("lineNumber = {}, fileName = {}, text = {}", lineNumber, fileName, text);
-            return true;
-
-        } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn("Ошибка ArrayIndexOutOfBoundsException {}", e.getMessage());
-            return false;
-        } catch (RuntimeException e) {
-            log.warn("Ошибка RuntimeException {}", e.getMessage());
-            return false;
         }
     }
 
     @Override
     public void handle(ArrayList<String> addCommandList) {
-        hepler = new Lesson5Hepler();
+        Lesson5Hepler hepler = new Lesson5Hepler();
+        int lineNumber = -1;
+        String fileName = addCommandList.get(1);
+        String text = addCommandList.get(2);
 
-        log.debug("Команда {}", command);
-        if (parseCommand(addCommandList)) {
-            save();
-            System.out.println(" - Опперация add выполнена");
-            return;
-        } else {
-            System.out.println(" - Комманда имеет не верный формат");
+        if (hepler.isDigit(addCommandList.get(1))) {
+            lineNumber = Integer.valueOf(addCommandList.get(1));
+            fileName = addCommandList.get(2);
+            text = addCommandList.get(3);
+        }
+
+        log.debug("Команда {}", addCommandList.get(0));
+        log.debug("lineNumber = {}, fileName = {}, text = {}", lineNumber, fileName, text);
+
+        try {
+            validate(text);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            log.warn("Ошибка ArrayIndexOutOfBoundsException {}", e.getMessage());
+        } catch (RuntimeException e) {
+            log.warn("Ошибка RuntimeException {}", e.getMessage());
             return;
         }
-    }
 
-    @Override
-    public String toString() {
-        return "AddCommandHandler{" +
-                ", fileName='" + fileName + '\'' +
-                ", lineNumber=" + lineNumber +
-                ", text='" + text + '\'' +
-                ", hepler=" + hepler +
-                '}';
+        save(hepler, fileName, lineNumber, text, Commands.ADD.getValue());
+        System.out.println(" - Опперация add выполнена");
     }
 }

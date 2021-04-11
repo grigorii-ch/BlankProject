@@ -14,12 +14,6 @@ import java.util.ArrayList;
  */
 @Slf4j
 public class DeleteCommandHandler implements CommandHandler {
-
-    private String fileName;
-    private int lineNumber = -1;
-
-    private Lesson5Hepler hepler;
-
     /**
      * Конструктор
      */
@@ -29,7 +23,7 @@ public class DeleteCommandHandler implements CommandHandler {
     /**
      * Метод для передачи данных на сохранение
      */
-    private void delete() {
+    private void delete(Lesson5Hepler hepler, String fileName, int lineNumber) {
         hepler.writeToFile(fileName, lineNumber, null, Commands.DELETE.getValue());
     }
 
@@ -37,50 +31,26 @@ public class DeleteCommandHandler implements CommandHandler {
      * Парсинг введенной команды
      * @return
      */
-    private boolean parseCommand(ArrayList<String> dellCommandList) {
-        try {
-            hepler.validate(dellCommandList);
-
-            if (hepler.isDigit(dellCommandList.get(1))) {
-                lineNumber = Integer.valueOf(dellCommandList.get(1));
-                fileName = dellCommandList.get(2);
-
-                log.debug("lineNumber = {}, fileName = {}", lineNumber, fileName);
-                return true;
-            }
-            fileName = dellCommandList.get(1);
-
-            log.debug("lineNumber = {}, fileName = {}", lineNumber, fileName);
-            return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn("Ошибка ArrayIndexOutOfBoundsException {}", e.getMessage());
-            return false;
-        } catch (RuntimeException e) {
-            log.warn("Ошибка RuntimeException {}", e.getMessage());
-            return false;
-        }
-    }
 
     @Override
     public void handle(ArrayList<String> delArray) {
-        hepler = new Lesson5Hepler();
-        log.debug("Команда {}", Commands.DELETE.getValue());
-        if (parseCommand(delArray)) {
-            delete();
-            System.out.println(" - Опперация delete выполнена");
-            return;
-        } else {
-            System.out.println(" - Комманда имеет не верный формат");
-            return;
+        Lesson5Hepler hepler = new Lesson5Hepler();
+        int lineNumber = -1;
+        String fileName = delArray.get(1);
+        String text = delArray.get(2);
+
+        if (hepler.isDigit(delArray.get(1))) {
+            lineNumber = Integer.valueOf(delArray.get(1));
+            fileName = delArray.get(2);
+            text = delArray.get(3);
         }
+
+        log.debug("Команда {}", delArray.get(0));
+        log.debug("lineNumber = {}, fileName = {}, text = {}", lineNumber, fileName, text);
+
+        delete(hepler,fileName,lineNumber);
+        System.out.println(" - Опперация delete выполнена");
+        return;
     }
 
-    @Override
-    public String toString() {
-        return "DeleteCommandHandler{" +
-                ", fileName='" + fileName + '\'' +
-                ", lineNumber=" + lineNumber +
-                ", hepler=" + hepler +
-                '}';
-    }
 }
