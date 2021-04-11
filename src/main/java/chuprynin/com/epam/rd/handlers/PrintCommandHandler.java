@@ -1,5 +1,6 @@
 package chuprynin.com.epam.rd.handlers;
 
+import chuprynin.com.epam.rd.emums.Commands;
 import chuprynin.com.epam.rd.helper.Lesson5Hepler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,9 +14,7 @@ import java.util.ArrayList;
  */
 
 @Slf4j
-public class Handler_Print {
-    private ArrayList<String> printCommandList;
-
+public class PrintCommandHandler implements CommandHandler {
     private String fileName;
     private int lineNumber = -1;
 
@@ -23,18 +22,15 @@ public class Handler_Print {
 
     /**
      * Конструктор
-     * @param printArray
      */
-    public Handler_Print(ArrayList<String> printArray) {
-        hepler = new Lesson5Hepler();
-        this.printCommandList = printArray;
+    public PrintCommandHandler() {
     }
 
     /**
      * Парсинг команды
      * @return
      */
-    public boolean parseCommand() {
+    private boolean parseCommand(ArrayList<String> printCommandList) {
         try {
             if (hepler.isDigit(printCommandList.get(1))) {
                 lineNumber = Integer.valueOf(printCommandList.get(1));
@@ -63,7 +59,7 @@ public class Handler_Print {
     /**
      * Вывод результата
      */
-    public void print() {
+    private void print() {
         ArrayList<String> printList = hepler.readFile(fileName);
 
         if ((lineNumber == -1) || (lineNumber > printList.size()-1)) {
@@ -75,4 +71,24 @@ public class Handler_Print {
         System.out.println(printList.get(lineNumber-1));
     }
 
+    @Override
+    public void handle(ArrayList<String> printArray) {
+        hepler = new Lesson5Hepler();
+
+        log.debug("Команда {}", Commands.PRINT.getValue());
+        if (parseCommand(printArray)) {
+            print();
+            return;
+        }
+        return;
+    }
+
+    @Override
+    public String toString() {
+        return "PrintCommandHandler{" +
+                ", fileName='" + fileName + '\'' +
+                ", lineNumber=" + lineNumber +
+                ", hepler=" + hepler +
+                '}';
+    }
 }

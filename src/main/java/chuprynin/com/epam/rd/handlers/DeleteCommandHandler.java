@@ -1,5 +1,6 @@
 package chuprynin.com.epam.rd.handlers;
 
+import chuprynin.com.epam.rd.emums.Commands;
 import chuprynin.com.epam.rd.helper.Lesson5Hepler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,8 +13,7 @@ import java.util.ArrayList;
  * ВНИМАНИЕ, если мы не указываем номер строки, а к примеру даем команду delete, то мы удаляем последнюю строку из файла.
  */
 @Slf4j
-public class Handler_Delete {
-    private ArrayList<String> dellCommandList;
+public class DeleteCommandHandler implements CommandHandler {
 
     private String fileName;
     private int lineNumber = -1;
@@ -22,25 +22,22 @@ public class Handler_Delete {
 
     /**
      * Конструктор
-     * @param delArray
      */
-    public Handler_Delete(ArrayList<String> delArray) {
-        hepler = new Lesson5Hepler();
-        this.dellCommandList = delArray;
+    public DeleteCommandHandler() {
     }
 
     /**
      * Метод для передачи данных на сохранение
      */
-    public void delete() {
-        hepler.writeToFile(fileName, lineNumber, null, dellCommandList.get(0));
+    private void delete() {
+        hepler.writeToFile(fileName, lineNumber, null, Commands.DELETE.getValue());
     }
 
     /**
      * Парсинг введенной команды
      * @return
      */
-    public boolean parseCommand() {
+    private boolean parseCommand(ArrayList<String> dellCommandList) {
         try {
             hepler.validate(dellCommandList);
 
@@ -62,5 +59,28 @@ public class Handler_Delete {
             log.warn("Ошибка RuntimeException {}", e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public void handle(ArrayList<String> delArray) {
+        hepler = new Lesson5Hepler();
+        log.debug("Команда {}", Commands.DELETE.getValue());
+        if (parseCommand(delArray)) {
+            delete();
+            System.out.println(" - Опперация delete выполнена");
+            return;
+        } else {
+            System.out.println(" - Комманда имеет не верный формат");
+            return;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "DeleteCommandHandler{" +
+                ", fileName='" + fileName + '\'' +
+                ", lineNumber=" + lineNumber +
+                ", hepler=" + hepler +
+                '}';
     }
 }

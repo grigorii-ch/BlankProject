@@ -1,5 +1,6 @@
 package chuprynin.com.epam.rd.handlers;
 
+import chuprynin.com.epam.rd.emums.Commands;
 import chuprynin.com.epam.rd.helper.Lesson5Hepler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,33 +17,30 @@ import java.util.ArrayList;
  */
 
 @Slf4j
-public class Handler_Add {
-    private ArrayList<String> addCommandList;
-
+public class AddCommandHandler implements CommandHandler {
     private String fileName;
     private int lineNumber = -1;
     private String text;
+    private final String command = Commands.ADD.getValue();
 
     private Lesson5Hepler hepler;
 
     /**
      * Конструктор
-     * @param addCommandList
      */
-    public Handler_Add(ArrayList<String> addCommandList) {
-        hepler = new Lesson5Hepler();
-        this.addCommandList = addCommandList;
+    public AddCommandHandler(){
     }
 
     /**
      * Сохранение данных
      */
-    public void save() {
-        hepler.writeToFile(fileName, lineNumber, text, addCommandList.get(0));
+    private void save() {
+        hepler.writeToFile(fileName, lineNumber, text, command);
     }
 
     /**
      * Проверка добавляемого текста
+     *
      * @throws RuntimeException
      */
     private void validate() throws RuntimeException {
@@ -54,9 +52,10 @@ public class Handler_Add {
 
     /**
      * Парсинг команды
+     *
      * @return
      */
-    public boolean parseCommand() {
+    private boolean parseCommand(ArrayList<String> addCommandList) {
         try {
             if (hepler.isDigit(addCommandList.get(1))) {
                 lineNumber = Integer.valueOf(addCommandList.get(1));
@@ -65,16 +64,16 @@ public class Handler_Add {
 
                 validate();
 
-                log.debug("lineNumber = {}, fileName = {}, text = {}",lineNumber ,fileName, text);
+                log.debug("lineNumber = {}, fileName = {}, text = {}", lineNumber, fileName, text);
                 return true;
             }
-                fileName = addCommandList.get(1);
-                text = addCommandList.get(2);
+            fileName = addCommandList.get(1);
+            text = addCommandList.get(2);
 
-                validate();
+            validate();
 
-                log.debug("lineNumber = {}, fileName = {}, text = {}",lineNumber ,fileName, text);
-                return true;
+            log.debug("lineNumber = {}, fileName = {}, text = {}", lineNumber, fileName, text);
+            return true;
 
         } catch (ArrayIndexOutOfBoundsException e) {
             log.warn("Ошибка ArrayIndexOutOfBoundsException {}", e.getMessage());
@@ -83,5 +82,30 @@ public class Handler_Add {
             log.warn("Ошибка RuntimeException {}", e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public void handle(ArrayList<String> addCommandList) {
+        hepler = new Lesson5Hepler();
+
+        log.debug("Команда {}", command);
+        if (parseCommand(addCommandList)) {
+            save();
+            System.out.println(" - Опперация add выполнена");
+            return;
+        } else {
+            System.out.println(" - Комманда имеет не верный формат");
+            return;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "AddCommandHandler{" +
+                ", fileName='" + fileName + '\'' +
+                ", lineNumber=" + lineNumber +
+                ", text='" + text + '\'' +
+                ", hepler=" + hepler +
+                '}';
     }
 }

@@ -1,14 +1,17 @@
 package chuprynin.com.epam.rd;
 
 import chuprynin.com.epam.rd.emums.Commands;
-import chuprynin.com.epam.rd.handlers.Handler_Add;
-import chuprynin.com.epam.rd.handlers.Handler_Delete;
-import chuprynin.com.epam.rd.handlers.Handler_Print;
+import chuprynin.com.epam.rd.handlers.AddCommandHandler;
+import chuprynin.com.epam.rd.handlers.CommandHandler;
+import chuprynin.com.epam.rd.handlers.DeleteCommandHandler;
+import chuprynin.com.epam.rd.handlers.PrintCommandHandler;
 import chuprynin.com.epam.rd.helper.Lesson5Hepler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public class CommandFilter {
@@ -30,64 +33,41 @@ public class CommandFilter {
         return endProgram;
     }
 
+    static CommandHandler getHandler(String command) {
+        AddCommandHandler addHandler = new AddCommandHandler();
+        DeleteCommandHandler deleteHandler = new DeleteCommandHandler();
+        PrintCommandHandler printHandler = new PrintCommandHandler();
+
+        Map mapHandler = new HashMap<String,CommandHandler>();
+        mapHandler.put(Commands.ADD.getValue(),addHandler);
+        mapHandler.put(Commands.DELETE.getValue(),deleteHandler);
+        mapHandler.put(Commands.PRINT.getValue(),printHandler);
+
+        return (CommandHandler) mapHandler.get(command);
+    }
+
     /**
      * метод для определения введенной команды
      * @param command
      */
     public void defineCommand(String command) {
-        ArrayList<String> parseCommand = new ArrayList<>();
+        ArrayList<String> parseCommand =  new ArrayList<>();
         parseCommand.addAll(Arrays.asList(command.split(" ")));
 
         Lesson5Hepler lesson5Hepler = new Lesson5Hepler();
         parseCommand = lesson5Hepler.removeSpaces(parseCommand);
 
-        command = parseCommand.get(0);
-
-
-        if (Commands.ADD.getValue().equals(command)) {
-            log.debug("Команда {}", command);
-            Handler_Add handlerAdd = new Handler_Add(parseCommand);
-            if (handlerAdd.parseCommand()) {
-                handlerAdd.save();
-                System.out.println(" - Опперация add выполнена");
-                return;
-            } else {
-                System.out.println(" - Комманда имеет не верный формат");
-                return;
-            }
-        }
-
-        if (Commands.DELETE.getValue().equals(command)) {
-            log.debug("Команда {}", command);
-            Handler_Delete handlerDelete = new Handler_Delete(parseCommand);
-
-            if (handlerDelete.parseCommand()) {
-                handlerDelete.delete();
-                System.out.println(" - Опперация delete выполнена");
-                return;
-            } else {
-                System.out.println(" - Комманда имеет не верный формат");
-                return;
-            }
-        }
-
-        if (Commands.PRINT.getValue().equals(command)) {
-            log.debug("Команда {}", command);
-            Handler_Print handlerPrint = new Handler_Print(parseCommand);
-            if (handlerPrint.parseCommand()) {
-                handlerPrint.print();
-                return;
-            }
-            return;
-        }
-
-        if (Commands.EXIT.getValue().equals(command)) {
-            log.debug("Команда {}", command);
+        if (Commands.EXIT.getValue().equals(parseCommand.get(0))) {
             this.endProgram = true;
-            System.out.println("Заверщение программы.");
             return;
         }
-        log.debug("Введена не извесьная команда {}", command);
-        System.out.println(String.format("%s не известная команда.", command));
+
+        try {
+            CommandHandler handler = getHandler(parseCommand.get(0));
+            handler.handle(parseCommand);
+        } catch (NullPointerException e) {
+            log.warn("Ошибка {},  NullPointerException {}", "Не удалось определить команду", e.getMessage());
+            System.out.println("Не удалось определить команду");
+        }
     }
 }
