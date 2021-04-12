@@ -11,5 +11,4 @@ class StorageTest {
         Storage<String> storage = new Storage<>(new String[]{"Test1"});
         assertTrue(storage.getCapacity() == 1 && storage.getCache().getCache().length == 1);
     }
-
 }
