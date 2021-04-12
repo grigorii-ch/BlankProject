@@ -11,6 +11,14 @@ public class Cache<T> {
     private CacheElement<T>[] cache;
     private int capacity;
 
+    public CacheElement<T>[] getCache() {
+        return cache;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
     /**
      * Конструктор, создает массив с переданной длиной в параметре
      *

@@ -7,6 +7,30 @@ public class Storage<T> {
     private Cache<T> cache;
     private int capacity;
 
+    public Object[] getStorage() {
+        return storage;
+    }
+
+    public void setStorage(Object[] storage) {
+        this.storage = storage;
+    }
+
+    public Cache<T> getCache() {
+        return cache;
+    }
+
+    public void setCache(Cache<T> cache) {
+        this.cache = cache;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
     /**
      * Дефолтный конструктор класса
      */
