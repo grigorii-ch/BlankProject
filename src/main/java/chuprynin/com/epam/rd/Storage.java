@@ -1,7 +1,10 @@
 package chuprynin.com.epam.rd;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Arrays;
 
+@Slf4j
 public class Storage<T> {
     private Object[] storage;
     private Cache<T> cache;
@@ -38,6 +41,7 @@ public class Storage<T> {
         this.capacity = 10; // Значение по умолчанию
         this.storage = new Object[capacity];
         cache = new Cache<T>(capacity);
+        log.debug("Создан обьект {}, c элементоми  Object[{}], Cache<T>({}) ", this.getClass().getName(), capacity, capacity);
     }
 
     /**
@@ -49,6 +53,7 @@ public class Storage<T> {
         this.capacity = storage.length;
         this.storage = storage;
         cache = new Cache<T>(capacity);
+        log.debug("Создан обьект {}, c элементоми  Object[{}], Cache<T>({}) ", this.getClass().getName(), capacity, capacity);
     }
 
     /**
@@ -56,10 +61,16 @@ public class Storage<T> {
      *
      * @param element
      */
-    public void add(T element) {
+    public void add(T element) throws StorageElementNotExists {
+        if (element == null) {
+            log.warn("Добавляемый елемент не должен быть null");
+            throw new StorageElementNotExists("Добавляемый елемент не должен быть null ");
+        }
+
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == null) {
                 storage[i] = element;
+                log.debug("Элемент {} добавлен в свободную ячейку", element);
                 return;
             }
         }
@@ -68,16 +79,22 @@ public class Storage<T> {
 
     /**
      * Медол увеличение длинны массива в 1,5 раза
+     *
      * @param element
      */
     private void increaseLengthStorage(T element) {
-        capacity = (int) (capacity * 1.5);
-        Object[] newStorage = new Object[capacity];
-        for (int i = 0; i < storage.length; i++) {
-            newStorage[i] = storage[i];
+        try {
+            capacity = (int) (capacity * 1.5);
+            Object[] newStorage = new Object[capacity];
+            for (int i = 0; i < storage.length; i++) {
+                newStorage[i] = storage[i];
+            }
+            newStorage[storage.length] = element;
+            storage = newStorage;
+            log.debug("Массив увеличен до {}, Элемент {} добавн в первую свободную ячейку", capacity, element);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            log.warn("Ошибка в методе {}} : {}, элемент {} не был добавлен", "increaseLengthStorage", e.getMessage(), element);
         }
-        newStorage[storage.length] = element;
-        storage = newStorage;
     }
 
     /**
@@ -92,13 +109,19 @@ public class Storage<T> {
 
         if (cache.isPresent(tmpElement)) {
             cache.delete(tmpElement);
+            log.debug("Элемент {} удален из cache", tmpElement);
         }
 
-        for (int i = storage.length - 1; i >= 0; i--) {
-            if (storage[i] != null && storage[i].equals(tmpElement)) {
-                storage[i] = null;
-                return;
+        try {
+            for (int i = storage.length - 1; i >= 0; i--) {
+                if (storage[i] != null && storage[i].equals(tmpElement)) {
+                    storage[i] = null;
+                    log.debug("Элемент {} удален из storage", tmpElement);
+                    return;
+                }
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            log.warn("Ошибка в методе {}} : {}", "delete", e.getMessage());
         }
     }
 
@@ -107,7 +130,7 @@ public class Storage<T> {
      */
     public void clear() {
         cache.clear();
-        for(int i = 0; i < storage.length; i++) {
+        for (int i = 0; i < storage.length; i++) {
             storage[i] = null;
         }
     }
@@ -140,8 +163,14 @@ public class Storage<T> {
         if (capacity < index) {
             return null;
         }
-        cache.add((T) storage[index], index);
-        return (T) storage[index];
+
+        try {
+            cache.add((T) storage[index], index);
+            return (T) storage[index];
+        } catch (CacheElementNotExists e) {
+            log.warn("Ошибка при получании элемента из массива по индексу {}", index);
+            return null;
+        }
     }
 
     @Override
