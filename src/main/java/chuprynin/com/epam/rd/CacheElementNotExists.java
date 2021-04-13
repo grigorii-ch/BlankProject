@@ -14,7 +14,7 @@ public class CacheElementNotExists extends Exception {
         super("CheckedNoSuchElementException");
     }
 
-    public String printFullStackTrace(){
+    public String printFullStackTrace() {
         StringWriter sw = new StringWriter();
         super.printStackTrace(new PrintWriter(sw));
         return sw.toString();
