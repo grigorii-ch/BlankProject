@@ -14,6 +14,22 @@ public class Cache<T> {
     private CacheElement<T>[] cache;
     private int capacity;
 
+    public CacheElement<T>[] getCache() {
+        return cache;
+    }
+
+    public void setCache(CacheElement<T>[] cache) {
+        this.cache = cache;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
     /**
      * Конструктор, создает массив с переданной длиной в параметре
      *
@@ -42,7 +58,7 @@ public class Cache<T> {
         for (int i = 0; i < capacity; i++) {
             if (cache[i] == null) {
                 cache[i] = cacheElement;
-                log.debug("Обьект {} c индексом {} добавлен в {} позицию,", element, index, i-1);
+                log.debug("Обьект {} c индексом {} добавлен в {} позицию,", element, index, i - 1);
                 return;
             }
         }

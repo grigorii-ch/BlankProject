@@ -10,6 +10,30 @@ public class Storage<T> {
     private Cache<T> cache;
     private int capacity;
 
+    public Object[] getStorage() {
+        return storage;
+    }
+
+    public void setStorage(Object[] storage) {
+        this.storage = storage;
+    }
+
+    public Cache<T> getCache() {
+        return cache;
+    }
+
+    public void setCache(Cache<T> cache) {
+        this.cache = cache;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
     /**
      * Дефолтный конструктор класса
      */
@@ -92,12 +116,12 @@ public class Storage<T> {
             for (int i = storage.length - 1; i >= 0; i--) {
                 if (storage[i] != null && storage[i].equals(tmpElement)) {
                     storage[i] = null;
-                    log.debug("Элемент {} удален из storage",tmpElement);
+                    log.debug("Элемент {} удален из storage", tmpElement);
                     return;
                 }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn("Ошибка в методе {}} : {}", "delete", e.getMessage());
+            log.warn("Ошибка в методе {} : {}", "delete", e.getMessage());
         }
     }
 
