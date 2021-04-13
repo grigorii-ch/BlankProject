@@ -11,7 +11,7 @@ class CacheElementTest {
     @Test
     void checkCacheElementConstructor() {
         CacheElement<String> cacheElement = new CacheElement<>("Test1", 1);
-        assertTrue(cacheElement.getClass() == CacheElement.class);
+        assertEquals(cacheElement.getClass(), CacheElement.class);
     }
 
     @Test
@@ -36,7 +36,7 @@ class CacheElementTest {
     void checkCacheElementGetIndex() {
         int expectedResult = 1;
         CacheElement<String> cacheElement = new CacheElement<>("Test1", expectedResult);
-        assertTrue(expectedResult == cacheElement.getIndex());
+        assertEquals(expectedResult, cacheElement.getIndex());
     }
 
     @Test
@@ -47,21 +47,21 @@ class CacheElementTest {
         CacheElement<String> cacheElement = new CacheElement<>("Test1", expectedResult);
         cacheElement.setIndex(actualtedResult);
 
-        assertTrue(actualtedResult == cacheElement.getIndex());
+        assertEquals(actualtedResult, cacheElement.getIndex());
     }
 
     @Test
     void checkCacheElementEquals() {
         CacheElement<String> cacheElement = new CacheElement<>("Test1", 1);
         CacheElement<String> cacheElement2 = new CacheElement<>("Test1", 1);
-        assertTrue(cacheElement.equals(cacheElement));
-        assertFalse(cacheElement.equals(null));
-        assertTrue(cacheElement.equals(cacheElement2));
+        assertEquals(cacheElement, cacheElement);
+        assertNotNull(cacheElement);
+        assertEquals(cacheElement, cacheElement2);
     }
 
     @Test
     void checkCacheHashCode() {
         CacheElement<String> cacheElement = new CacheElement<>("Test1", 1);
-        assertTrue(Objects.hash("Test1", 1) == cacheElement.hashCode());
+        assertEquals(Objects.hash("Test1", 1), cacheElement.hashCode());
     }
 }

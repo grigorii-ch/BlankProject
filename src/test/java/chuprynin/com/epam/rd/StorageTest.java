@@ -11,14 +11,16 @@ class StorageTest {
     public void checkStorageConstructorWithParam() {
         Storage<String> storage = new Storage<>(new String[]{"Test1"});
 
-        assertTrue(storage.getCapacity() == 1 && storage.getCache().getCache().length == 1);
+        assertEquals(storage.getCapacity(), 1);
+        assertEquals(storage.getCache().getCache().length, 1);
     }
 
     @Test
     public void checkStorageConstructorWithOutParam() {
         Storage<String> storage = new Storage<>();
 
-        assertTrue(storage.getCapacity() == 10 && storage.getCache().getCache().length == 10);
+        assertEquals(storage.getCapacity(), 10);
+        assertEquals(storage.getCache().getCache().length, 10);
     }
 
     @Test
@@ -55,7 +57,7 @@ class StorageTest {
         String testElement = "Test5";
         Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3", "Test4", testElement});
 
-        assertTrue(testElement.equals(storage.getLast()));
+        assertEquals(testElement, storage.getLast());
     }
 
     @Test

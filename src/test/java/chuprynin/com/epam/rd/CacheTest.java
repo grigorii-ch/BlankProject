@@ -12,32 +12,24 @@ class CacheTest {
     @Test
     void checkCacheConstructor() {
         Cache<String> cache = new Cache<>(2);
-        assertTrue(cache.getCache().length == 2);
+        assertEquals(cache.getCache().length, 2);
     }
 
     @Test
-    void checkCacheAddToFreePosition() {
+    void checkCacheAddToFreePosition() throws CacheElementNotExists {
         Cache<String> cache = new Cache<>(2);
-        try {
-            cache.add("Test1", 1);
-            cache.add("Test2", 2);
-        } catch (CacheElementNotExists cacheElementNotExists) {
-            log.warn(cacheElementNotExists.printFullStackTrace());
-        }
+        cache.add("Test1", 1);
+        cache.add("Test2", 2);
 
         assertEquals(cache.get(2), "Test2");
     }
 
     @Test
-    void checkCacheAddToLastPositionWithMoveSubRange() {
+    void checkCacheAddToLastPositionWithMoveSubRange() throws CacheElementNotExists {
         Cache<String> cache = new Cache<>(2);
-        try {
-            cache.add("Test1", 1);
-            cache.add("Test2", 2);
-            cache.add("Test3", 3);
-        } catch (CacheElementNotExists cacheElementNotExists) {
-            log.warn(cacheElementNotExists.printFullStackTrace());
-        }
+        cache.add("Test1", 1);
+        cache.add("Test2", 2);
+        cache.add("Test3", 3);
 
         assertNull(cache.get(1), "Test1");
         assertEquals(cache.get(2), "Test2");
@@ -46,14 +38,10 @@ class CacheTest {
 
 
     @Test
-    void checkCacheDelete() {
+    void checkCacheDelete() throws CacheElementNotExists {
         Cache<String> cache = new Cache<>(2);
-        try {
-            cache.add("Test1", 1);
-            cache.add("Test2", 2);
-        } catch (CacheElementNotExists cacheElementNotExists) {
-            log.warn(cacheElementNotExists.printFullStackTrace());
-        }
+        cache.add("Test1", 1);
+        cache.add("Test2", 2);
 
         assertTrue(cache.isPresent("Test2"));
         cache.delete("Test2");
@@ -61,78 +49,53 @@ class CacheTest {
     }
 
     @Test
-    void checkCacheIsPresentByElement() {
+    void checkCacheIsPresentByElement() throws CacheElementNotExists {
         Cache<String> cache = new Cache<>(2);
-
-        try {
-            cache.add("Test1", 1);
-            cache.add("Test2", 2);
-        } catch (CacheElementNotExists cacheElementNotExists) {
-            log.warn(cacheElementNotExists.printFullStackTrace());
-        }
+        cache.add("Test1", 1);
+        cache.add("Test2", 2);
 
         assertTrue(cache.isPresent("Test2"));
     }
 
     @Test
-    void checkCacheIsNoPresentByElement() {
+    void checkCacheIsNoPresentByElement() throws CacheElementNotExists {
         Cache<String> cache = new Cache<>(2);
-        try {
-            cache.add("Test1", 1);
-            cache.add("Test2", 2);
-        } catch (CacheElementNotExists cacheElementNotExists) {
-            log.warn(cacheElementNotExists.printFullStackTrace());
-        }
+        cache.add("Test1", 1);
+        cache.add("Test2", 2);
 
         assertFalse(cache.isPresent("Test20"));
     }
 
     @Test
-    void checkCacheIsPresentByIndex() {
+    void checkCacheIsPresentByIndex() throws CacheElementNotExists {
         Cache<String> cache = new Cache<>(2);
-        try {
-            cache.add("Test1", 1);
-            cache.add("Test2", 2);
-        } catch (CacheElementNotExists cacheElementNotExists) {
-            log.warn(cacheElementNotExists.printFullStackTrace());
-        }
+        cache.add("Test1", 1);
+        cache.add("Test2", 2);
 
         assertTrue(cache.isPresent(2));
     }
 
     @Test
-    void checkCacheIsNotPresentByIndex() {
+    void checkCacheIsNotPresentByIndex() throws CacheElementNotExists {
         Cache<String> cache = new Cache<>(2);
-        try {
-            cache.add("Test1", 1);
-            cache.add("Test2", 2);
-        } catch (CacheElementNotExists cacheElementNotExists) {
-            log.warn(cacheElementNotExists.printFullStackTrace());
-        }
+        cache.add("Test1", 1);
+        cache.add("Test2", 2);
 
         assertFalse(cache.isPresent(20));
     }
 
     @Test
-    void checkCacheGetElemend() {
+    void checkCacheGetElement() throws CacheElementNotExists {
         Cache<String> cache = new Cache<>(1);
-        try {
-            cache.add("Test1", 1);
-        } catch (CacheElementNotExists cacheElementNotExists) {
-            log.warn(cacheElementNotExists.printFullStackTrace());
-        }
+        cache.add("Test1", 1);
 
-        assertTrue("Test1".equals(cache.get(1)));
+        assertEquals(cache.get(1), "Test1");
     }
 
     @Test
-    void checkCacheGetNull() {
+    void checkCacheGetNull() throws CacheElementNotExists {
         Cache<String> cache = new Cache<>(1);
-        try {
-            cache.add("Test1", 1);
-        } catch (CacheElementNotExists cacheElementNotExists) {
-            log.warn(cacheElementNotExists.printFullStackTrace());
-        }
+        cache.add("Test1", 1);
 
         assertNull(cache.get(2));
     }
