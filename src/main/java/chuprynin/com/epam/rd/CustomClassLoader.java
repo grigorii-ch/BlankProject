@@ -1,5 +1,7 @@
 package chuprynin.com.epam.rd;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,14 +11,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
- * Класс ждя загрузки .class файлов в рабочее приложение
+ * Класс для загрузки .class файлов в рабочее приложение
  */
+@Slf4j
 public class CustomClassLoader extends ClassLoader {
+
+    private final static String VALLID_EXTENSION = ".class";
 
     /**
      * Входной метод
+     *
      * @param pathName путь до файла
      * @return
      * @throws ClassNotFoundException
@@ -24,10 +31,10 @@ public class CustomClassLoader extends ClassLoader {
     @Override
     protected Class<?> findClass(String pathName) throws ClassNotFoundException {
 
-        ArrayList<String> fileNames = getListFileNames(pathName);
+        List<String> fileNames = getListFileNames(pathName);
 
         Class loadClass = Object.class;
-        try{
+        try {
             InputStream inStream = null;
             for (String fileName : fileNames) {
                 File file = new File(pathName + "\\" + fileName);
@@ -36,11 +43,11 @@ public class CustomClassLoader extends ClassLoader {
                 byte[] bytes = new byte[(int) file.length()];
                 inStream.read(bytes);
 
-                loadClass = defineClass(fileName.replace(".class",""), bytes, 0, bytes.length);
+                loadClass = defineClass(fileName.replace(VALLID_EXTENSION, ""), bytes, 0, bytes.length);
                 return loadClass;
             }
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.warn("Ошибка {}", e.getMessage(), e);
             throw new ClassNotFoundException("Проблемы с байт кодом");
         }
         return loadClass;
@@ -48,11 +55,13 @@ public class CustomClassLoader extends ClassLoader {
 
     /**
      * Получение всех файлов в директории
+     *
      * @param pathName
      * @return
      * @throws ClassNotFoundException
      */
-    private ArrayList<String> getListFileNames(String pathName) throws ClassNotFoundException {
+    private List<String> getListFileNames(String pathName) throws ClassNotFoundException {
+
         Path path = Paths.get(pathName);
 
         if (!Files.exists(path)) {
@@ -60,9 +69,9 @@ public class CustomClassLoader extends ClassLoader {
         }
 
         File file = new File(pathName);
-        ArrayList<String> files = checkFiles(file.list());
+        List<String> files = checkFiles(file.list());
 
-        if(files.size() == 0) {
+        if (files.size() == 0) {
             throw new ClassNotFoundException(String.format("В заданном каталоге \"%s\" нет файлов с расширением .class", pathName));
         }
 
@@ -71,15 +80,16 @@ public class CustomClassLoader extends ClassLoader {
 
     /**
      * Проверка, Фильтруются файлы только с расширением .class
+     *
      * @param files
      * @return
      */
-    private ArrayList<String> checkFiles(String[] files) {
-        ArrayList<String> listFiles = new ArrayList<>();
-        listFiles.addAll( Arrays.asList(files));
+    private List<String> checkFiles(String[] files) {
+
+        List<String> listFiles = new ArrayList(Arrays.asList(files));
 
         for (int i = 0; i < listFiles.size(); i++) {
-            if (!listFiles.get(i).contains(".class")) {
+            if (!listFiles.get(i).contains(VALLID_EXTENSION)) {
                 listFiles.remove(i);
             }
         }

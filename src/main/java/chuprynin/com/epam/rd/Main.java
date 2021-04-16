@@ -2,11 +2,16 @@ package chuprynin.com.epam.rd;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
 @Slf4j
 public class Main {
+
+    private final static String DEFAULT_FILE_PATH = ".class";
+
     public static void main(String[] args) {
+
         log.debug("Start");
 
         loadClass(args);
@@ -17,10 +22,11 @@ public class Main {
 
         log.debug("end");
     }
+
     private static void loadClass(String[] args) {
 
         try {
-            String filePath = "C:\\myClasses";
+            String filePath = DEFAULT_FILE_PATH;
 
             if(args.length > 0) {
                 if (!Objects.isNull(args[0])) {
@@ -30,19 +36,16 @@ public class Main {
 
             CustomClassLoader classLoader = new CustomClassLoader();
             Class c = classLoader.findClass(filePath);
-            Object obj = c.newInstance();
+            Object obj = c.getDeclaredConstructor().newInstance();
             System.out.println(obj);
 
-        } catch (ClassNotFoundException e) {
-            log.warn("Ошибка: {}", e.getMessage());
-        } catch (IllegalAccessException e) {
-            log.warn("Ошибка: {}", e.getMessage());
-        } catch (InstantiationException e) {
-            log.warn("Ошибка: {}", e.getMessage());
+        } catch (Exception e) {
+            log.warn("Ошибка: {}", e.getMessage(), e);
         }
     }
 
     private static void getImitateStackOverflow() {
+
         try {
             ImitateStackOverflowError imitate = new ImitateStackOverflowError();
             imitate.doIt();
@@ -52,6 +55,7 @@ public class Main {
     }
 
     private static void getImitateOutOfMemory() {
+
         try {
             ImitateOutOfMemoryError imitate = new ImitateOutOfMemoryError();
             imitate.doIt();
