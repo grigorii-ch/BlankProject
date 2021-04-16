@@ -10,31 +10,48 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Класс ждя загрузки .class файлов в рабочее приложение
+ */
 public class CustomClassLoader extends ClassLoader {
+
+    /**
+     * Входной метод
+     * @param pathName путь до файла
+     * @return
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Class<?> findClass(String pathName) throws ClassNotFoundException {
 
-        ArrayList<String> filenames = getListFileNames(pathName);
+        ArrayList<String> fileNames = getListFileNames(pathName);
 
+        Class loadClass = Object.class;
         try{
             InputStream inStream = null;
-            for (String file : filenames) {
-                inStream = new BufferedInputStream(new FileInputStream(pathName + "\\" + file));
+            for (String fileName : fileNames) {
+                File file = new File(pathName + "\\" + fileName);
+
+                inStream = new BufferedInputStream(new FileInputStream(file));
                 byte[] bytes = new byte[(int) file.length()];
                 inStream.read(bytes);
 
-                Class loadClass = defineClass(file, bytes, 0, bytes.length);
-
+                loadClass = defineClass(fileName.replace(".class",""), bytes, 0, bytes.length);
+                return loadClass;
             }
         }catch (Exception e){
             e.printStackTrace();
             throw new ClassNotFoundException("Проблемы с байт кодом");
         }
-
-
-        return null; // TODO
+        return loadClass;
     }
 
+    /**
+     * Получение всех файлов в директории
+     * @param pathName
+     * @return
+     * @throws ClassNotFoundException
+     */
     private ArrayList<String> getListFileNames(String pathName) throws ClassNotFoundException {
         Path path = Paths.get(pathName);
 
@@ -52,6 +69,11 @@ public class CustomClassLoader extends ClassLoader {
         return files;
     }
 
+    /**
+     * Проверка, Фильтруются файлы только с расширением .class
+     * @param files
+     * @return
+     */
     private ArrayList<String> checkFiles(String[] files) {
         ArrayList<String> listFiles = new ArrayList<>();
         listFiles.addAll( Arrays.asList(files));

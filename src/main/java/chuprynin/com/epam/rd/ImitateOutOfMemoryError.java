@@ -1,9 +1,10 @@
 package chuprynin.com.epam.rd;
 
 import java.util.ArrayList;
-import java.util.List;
 
-
+/**
+ * Создание исключения OutOfMemoryError
+ */
 public class ImitateOutOfMemoryError {
     public void doIt(){
         ArrayList<String[]> arrayList = new ArrayList<>();
