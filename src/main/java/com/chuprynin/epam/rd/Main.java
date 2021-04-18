@@ -1,4 +1,4 @@
-package chuprynin.com.epam.rd;
+package com.chuprynin.epam.rd;
 
 public class Main {
     public static void main(String[] args) {
