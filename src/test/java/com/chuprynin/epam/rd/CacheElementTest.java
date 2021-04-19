@@ -1,4 +1,4 @@
-package chuprynin.com.epam.rd;
+package com.chuprynin.epam.rd;
 
 import org.junit.jupiter.api.Test;
 
@@ -60,8 +60,15 @@ class CacheElementTest {
     }
 
     @Test
-    void checkCacheHashCode() {
+    void checkCacheElementHashCode() {
         CacheElement<String> cacheElement = new CacheElement<>("Test1", 1);
         assertEquals(Objects.hash("Test1", 1), cacheElement.hashCode());
+    }
+
+    @Test
+    void checkCacheElementToString() {
+        CacheElement<String> cacheElement = new CacheElement<>("Test1", 1);
+        String expectedResoult = "CacheElement{element=Test1, index=1}";
+        assertEquals(expectedResoult, cacheElement.toString());
     }
 }

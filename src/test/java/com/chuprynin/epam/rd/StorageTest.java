@@ -1,4 +1,4 @@
-package chuprynin.com.epam.rd;
+package com.chuprynin.epam.rd;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class StorageTest {
 
     @Test
-    public void checkStorageConstructorWithParam() {
+    void checkStorageConstructorWithParam() {
         Storage<String> storage = new Storage<>(new String[]{"Test1"});
 
         assertEquals(storage.getCapacity(), 1);
@@ -16,7 +16,7 @@ class StorageTest {
     }
 
     @Test
-    public void checkStorageConstructorWithOutParam() {
+    void checkStorageConstructorWithOutParam() {
         Storage<String> storage = new Storage<>();
 
         assertEquals(storage.getCapacity(), 10);
@@ -24,7 +24,7 @@ class StorageTest {
     }
 
     @Test
-    public void checkStorageAddElement() {
+    void checkStorageAddElement() {
         String testElement = "testString";
 
         Storage<String> storage = new Storage<>();
@@ -34,7 +34,7 @@ class StorageTest {
     }
 
     @Test
-    public void checkStorageDeleteElement() {
+    void checkStorageDeleteElement() {
         String testElement = "Test5";
 
         Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3", "Test4", testElement});
@@ -45,7 +45,7 @@ class StorageTest {
     }
 
     @Test
-    public void checkStorageClearElements() {
+    void checkStorageClearElements() {
         Storage<String> storage = new Storage<>(new String[]{"Test1"});
         storage.clear();
 
@@ -53,7 +53,7 @@ class StorageTest {
     }
 
     @Test
-    public void checkStorageGetLastElement() {
+    void checkStorageGetLastElement() {
         String testElement = "Test5";
         Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3", "Test4", testElement});
 
@@ -61,7 +61,7 @@ class StorageTest {
     }
 
     @Test
-    public void checkStorageGetLastElementNull() {
+    void checkStorageGetLastElementNull() {
         Storage<String> storage = new Storage<>(new String[]{null});
 
         assertNull(storage.getLast());
@@ -69,14 +69,14 @@ class StorageTest {
 
 
     @Test
-    public void checkStorageGetElementReturnNull() {
+    void checkStorageGetElementReturnNull() {
         Storage<String> storage = new Storage<>();
 
         assertNull(storage.get(11));
     }
 
     @Test
-    public void checkStorageGetElementReturnFromArray() {
+    void checkStorageGetElementReturnFromArray() {
         Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3"});
         storage.add("Test4");
 
@@ -85,11 +85,18 @@ class StorageTest {
     }
 
     @Test
-    public void checkStorageGetElementWithStorageElementNotExists() {
+    void checkStorageGetElementWithStorageElementNotExists() {
         Assertions.assertThrows(StorageElementNotExists.class, () -> {
                     Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3"});
                     storage.add(null);
                 }
         );
+    }
+
+    @Test
+    void checkStorageToString() {
+        Storage<String> storage = new Storage<>();
+        String expecterResoult = "Storage{storage=[null, null, null, null, null, null, null, null, null, null], cache=Cache{cache=[null, null, null, null, null, null, null, null, null, null], capacity=10}}";
+        assertEquals(expecterResoult, storage.toString());
     }
 }

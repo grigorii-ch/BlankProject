@@ -1,4 +1,4 @@
-package chuprynin.com.epam.rd;
+package com.chuprynin.epam.rd;
 
 import java.util.Objects;
 

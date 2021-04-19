@@ -1,4 +1,4 @@
-package chuprynin.com.epam.rd;
+package com.chuprynin.epam.rd;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -107,5 +107,12 @@ class CacheTest {
                     cache.add(null, 100);
                 }
         );
+    }
+
+    @Test
+    void checkCacheToString() {
+        Cache<String> cache = new Cache<>(1);
+        String expectedResoult = "Cache{cache=[null], capacity=1}";
+        assertEquals(expectedResoult, cache.toString());
     }
 }
