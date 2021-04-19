@@ -49,7 +49,7 @@ public class Cache<T> {
         for (int i = 0; i < capacity; i++) {
             if (cache[i] == null) {
                 cache[i] = cacheElement;
-                log.debug("Обьект {} c индексом {} добавлен в {} позицию,", element, index, i - 1);
+                log.debug("Обьект {} c индексом {} добавлен в {} позицию,", element, index, i);
                 return;
             }
         }
@@ -57,7 +57,7 @@ public class Cache<T> {
         moveSubRangeToLeft(0);
 
         cache[capacity - 1] = cacheElement;
-        log.debug("Обьект {} c индексом {} добавлен в конец - {} позицию, ", element, index, capacity - 1);
+        log.debug("Обьект {} c индексом {} добавлен в конец - {} позицию, ", element, index, capacity);
     }
 
     /**
