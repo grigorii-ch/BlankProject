@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+    <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
@@ -17,16 +17,16 @@
         </encoder>
     </appender>
 
-    <logger name="com.chuprynin.epam.rd.Main" level="debug" additivity="false">
+    <logger name="chuprynin.com.epam.rd.Cache" level="debug" additivity="false">
         <appender-ref ref="FILE"/>
     </logger>
 
-    <logger name="com.chuprynin.epam.rd" level="debug" additivity="false">
+    <logger name="chuprynin.com.epam.rd.Storage" level="debug" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>
 
-    <root level="trace">
+    <root level="debug">
         <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>
