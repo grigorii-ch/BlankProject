@@ -1,5 +1,6 @@
 package com.chuprynin.epam.rd;
 
+import com.chuprynin.epam.rd.exceptions.StorageElementNotExists;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -91,12 +92,5 @@ class StorageTest {
                     storage.add(null);
                 }
         );
-    }
-
-    @Test
-    void checkStorageToString() {
-        Storage<String> storage = new Storage<>();
-        String expecterResoult = "Storage{storage=[null, null, null, null, null, null, null, null, null, null], cache=Cache{cache=[null, null, null, null, null, null, null, null, null, null], capacity=10}}";
-        assertEquals(expecterResoult, storage.toString());
     }
 }

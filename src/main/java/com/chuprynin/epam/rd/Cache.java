@@ -1,23 +1,23 @@
 package com.chuprynin.epam.rd;
 
+import com.chuprynin.epam.rd.exceptions.CacheElementNotExists;
+import lombok.Data;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Класс для работы с параментрированным массивом
+ * Класс для работы с параметризованным массивом
  *
  * @param <T>
  */
 @Slf4j
+@Getter
 public class Cache<T> {
     private CacheElement<T>[] cache;
     private int capacity;
-
-    public CacheElement<T>[] getCache() {
-        return cache;
-    }
 
     /**
      * Конструктор, создает массив с переданной длиной в параметре
@@ -25,23 +25,21 @@ public class Cache<T> {
      * @param capacity
      */
     public Cache(int capacity) {
-
         this.capacity = capacity;
         cache = new CacheElement[this.capacity];
-        log.debug("Создан обьект {}, с длиной массива {}", this.getClass().getName(), capacity);
+        log.info("Создан объект {}, с длиной массива {}", this.getClass().getName(), capacity);
     }
 
     /**
-     * Добавление елемента в не занятый индекс массива
-     * еслм массмв полный - будет добавлен в конец со сдвигом в лево остальных
+     * Добавление элемента в не занятый индекс массива
+     * если массив полный - будет добавлен в конец со сдвигом в лево остальных
      *
      * @param element
      */
     public void add(T element, int index) throws CacheElementNotExists {
-
         if (Objects.isNull(element)) {
-            log.warn("Добавляемый елемент не должен быть null");
-            throw new CacheElementNotExists("Добавляемый елемент/обьект не должен быть null ");
+            log.warn("Добавляемый элемент  не должен быть null");
+            throw new CacheElementNotExists("Добавляемый элемент /объект не должен быть null ");
         }
 
         CacheElement cacheElement = new CacheElement(element, index);
@@ -49,7 +47,7 @@ public class Cache<T> {
         for (int i = 0; i < capacity; i++) {
             if (cache[i] == null) {
                 cache[i] = cacheElement;
-                log.debug("Обьект {} c индексом {} добавлен в {} позицию,", element, index, i);
+                log.debug("Объект  {} c индексом {} добавлен в {} позицию,", element, index, i);
                 return;
             }
         }
@@ -57,17 +55,16 @@ public class Cache<T> {
         moveSubRangeToLeft(0);
 
         cache[capacity - 1] = cacheElement;
-        log.debug("Обьект {} c индексом {} добавлен в конец - {} позицию, ", element, index, capacity);
+        log.debug("Объект {} c индексом {} добавлен в конец - {} позицию, ", element, index, capacity);
     }
 
     /**
      * Удаление элемента, если такой присутствует в массиве
-     * остальные елементы двигаются в лево
+     * остальные элементы двигаются в лево
      *
      * @param element
      */
     public void delete(T element) {
-
         if (isPresent(element)) {
             for (int i = 0; i < capacity; i++) {
                 if (element.equals(cache[i].getElement())) {
@@ -81,22 +78,7 @@ public class Cache<T> {
     }
 
     /**
-     * Двигаем массив от переданой позиции в лево
-     *
-     * @param position
-     */
-    private void moveSubRangeToLeft(int position) {
-        try {
-            for (int i = position; i < capacity - 1; i++) {
-                cache[i] = cache[i + 1];
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn("Ошибка в методе {} при добавлении элемента в Cache : {}", "moveSubRangeToLeft", e.getMessage());
-        }
-    }
-
-    /**
-     * Проверка наличия эллемента в массиве
+     * Проверка наличия элемента в массиве
      *
      * @param element
      * @return boolean
@@ -109,7 +91,7 @@ public class Cache<T> {
 
         for (int i = 0; i < capacity; i++) {
             if (cache[i] != null && element.equals(cache[i].getElement())) {
-                log.debug("Данный элемент {}, был найден в массиве с длинной {}", element, capacity);
+                log.debug("Данный элемент {}, был найден в массиве с длинной {} в позиции {}", element, capacity, i);
                 return true;
             }
         }
@@ -118,7 +100,7 @@ public class Cache<T> {
     }
 
     /**
-     * Проверка наличия эллемента в массиве
+     * Проверка наличия элемента в массиве
      *
      * @param index
      * @return boolean
@@ -126,7 +108,7 @@ public class Cache<T> {
     public boolean isPresent(int index) {
         for (int i = 0; i < capacity; i++) {
             if (cache[i] != null && index == cache[i].getIndex()) {
-                log.debug("Элемент с индексом {}, был найден в массиве с длинной {}", index, capacity);
+                log.debug("Элемент с индексом {}, был найден в массиве с длинной {} в позиции {}", index, capacity, i);
                 return true;
             }
         }
@@ -135,7 +117,7 @@ public class Cache<T> {
     }
 
     /**
-     * получение эллемента из массива
+     * получение элемента из массива
      * При нахождении элемента в кэше он перемещается в конец массива,
      * с учетом сдвига остальных элементов влево.
      *
@@ -155,10 +137,9 @@ public class Cache<T> {
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             log.warn("Ошибка в методе {} при добавлении элемента в Cache : {}", "get", e.getMessage());
-            return null;
+            return (T) new Object();
         }
-
-        return null;
+        return (T) new Object();
     }
 
     /**
@@ -168,13 +149,21 @@ public class Cache<T> {
         for (int i = 0; i < capacity; i++) {
             cache[i] = null;
         }
+        log.info("Массив очищен.");
     }
 
-    @Override
-    public String toString() {
-        return "Cache{" +
-                "cache=" + Arrays.toString(cache) +
-                ", capacity=" + capacity +
-                '}';
+    /**
+     * Двигаем массив от переданной позиции в лево
+     *
+     * @param position
+     */
+    private void moveSubRangeToLeft(int position) {
+        try {
+            for (int i = position; i < capacity - 1; i++) {
+                cache[i] = cache[i + 1];
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            log.warn("Ошибка в методе {} при добавлении элемента в Cache : {}", "moveSubRangeToLeft", e.getMessage());
+        }
     }
 }

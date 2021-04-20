@@ -1,8 +1,10 @@
 package com.chuprynin.epam.rd;
 
+import com.chuprynin.epam.rd.exceptions.CacheElementNotExists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Null;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,6 +60,13 @@ class CacheTest {
     }
 
     @Test
+    void checkCacheIsPresentByNull() throws CacheElementNotExists {
+        Cache<String> cache = new Cache<>(2);
+        assertFalse(cache.isPresent(null));
+
+    }
+
+    @Test
     void checkCacheIsNoPresentByElement() throws CacheElementNotExists {
         Cache<String> cache = new Cache<>(2);
         cache.add("Test1", 1);
@@ -107,12 +116,5 @@ class CacheTest {
                     cache.add(null, 100);
                 }
         );
-    }
-
-    @Test
-    void checkCacheToString() {
-        Cache<String> cache = new Cache<>(1);
-        String expectedResoult = "Cache{cache=[null], capacity=1}";
-        assertEquals(expectedResoult, cache.toString());
     }
 }

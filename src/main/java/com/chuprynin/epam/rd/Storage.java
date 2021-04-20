@@ -1,23 +1,21 @@
 package com.chuprynin.epam.rd;
 
+import com.chuprynin.epam.rd.exceptions.CacheElementNotExists;
+import com.chuprynin.epam.rd.exceptions.StorageElementNotExists;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 @Slf4j
+@Getter
 public class Storage<T> {
     private Object[] storage;
     private Cache<T> cache;
     private int capacity;
-
-    public Cache<T> getCache() {
-        return cache;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
 
     /**
      * Дефолтный конструктор класса
@@ -27,7 +25,7 @@ public class Storage<T> {
         this.capacity = 10;
         this.storage = new Object[capacity];
         cache = new Cache<T>(capacity);
-        log.debug("Создан обьект {}, c элементоми  Object[{}], Cache<T>({}) ", this.getClass().getName(), capacity, capacity);
+        log.info("Создан объект {}, c элементами  Object[{}], Cache<T>({}) ", this.getClass().getName(), capacity, capacity);
     }
 
     /**
@@ -39,7 +37,7 @@ public class Storage<T> {
         this.capacity = storage.length;
         this.storage = storage;
         cache = new Cache<T>(capacity);
-        log.debug("Создан обьект {}, c элементоми  Object[{}], Cache<T>({}) ", this.getClass().getName(), capacity, capacity);
+        log.info("Создан объект {}, c элементами  Object[{}], Cache<T>({}) ", this.getClass().getName(), capacity, capacity);
     }
 
     /**
@@ -49,8 +47,8 @@ public class Storage<T> {
      */
     public void add(T element) throws StorageElementNotExists {
         if (Objects.isNull(element)) {
-            log.warn("Добавляемый елемент не должен быть null");
-            throw new StorageElementNotExists("Добавляемый елемент не должен быть null ");
+            log.warn("Добавляемый элемент не должен быть null");
+            throw new StorageElementNotExists("Добавляемый элемент не должен быть null ");
         }
 
         for (int i = 0; i < storage.length; i++) {
@@ -61,26 +59,6 @@ public class Storage<T> {
             }
         }
         increaseLengthStorage(element);
-    }
-
-    /**
-     * Медол увеличение длинны массива в 1,5 раза
-     *
-     * @param element
-     */
-    private void increaseLengthStorage(T element) {
-        try {
-            capacity = (int) (capacity * 1.5);
-            Object[] newStorage = new Object[capacity];
-            for (int i = 0; i < storage.length; i++) {
-                newStorage[i] = storage[i];
-            }
-            newStorage[storage.length] = element;
-            storage = newStorage;
-            log.debug("Массив увеличен до {}, Элемент {} добавн в первую свободную ячейку", capacity, element);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn("Ошибка в методе {}} : {}, элемент {} не был добавлен", "increaseLengthStorage", e.getMessage(), element);
-        }
     }
 
     /**
@@ -119,6 +97,7 @@ public class Storage<T> {
         for (int i = 0; i < storage.length; i++) {
             storage[i] = null;
         }
+        log.debug("Кэш очищен.");
     }
 
     /**
@@ -132,7 +111,7 @@ public class Storage<T> {
                 return (T) storage[i];
             }
         }
-        return null;
+        return (T) new Object();
     }
 
     /**
@@ -148,23 +127,35 @@ public class Storage<T> {
             return cache.get(index);
         }
         if (capacity < index) {
-            return null;
+            return (T) new Object();
         }
 
         try {
             cache.add((T) storage[index], index);
             return (T) storage[index];
         } catch (CacheElementNotExists e) {
-            log.warn("Ошибка при получании элемента из массива по индексу {}", index);
-            return null;
+            log.warn("Ошибка при получении элемента из массива по индексу {}", index);
+            return (T) new Object();
         }
     }
 
-    @Override
-    public String toString() {
-        return "Storage{" +
-                "storage=" + Arrays.toString(storage) +
-                ", cache=" + cache +
-                '}';
+    /**
+     * Медод увеличение длинны массива в 1,5 раза
+     *
+     * @param element
+     */
+    private void increaseLengthStorage(T element) {
+        try {
+            capacity = (int) (capacity * 1.5);
+            Object[] newStorage = new Object[capacity];
+            for (int i = 0; i < storage.length; i++) {
+                newStorage[i] = storage[i];
+            }
+            newStorage[storage.length] = element;
+            storage = newStorage;
+            log.info("Массив увеличен до {}, Элемент {} добавн в первую свободную ячейку", capacity, element);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            log.warn("Ошибка в методе {}} : {}, элемент {} не был добавлен", "increaseLengthStorage", e.getMessage(), element);
+        }
     }
 }
