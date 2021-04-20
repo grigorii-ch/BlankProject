@@ -46,34 +46,11 @@ class StorageTest {
     }
 
     @Test
-    void checkStorageClearElements() {
-        Storage<String> storage = new Storage<>(new String[]{"Test1"});
-        storage.clear();
-
-        assertNull(storage.get(0));
-    }
-
-    @Test
     void checkStorageGetLastElement() {
         String testElement = "Test5";
         Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3", "Test4", testElement});
 
         assertEquals(testElement, storage.getLast());
-    }
-
-    @Test
-    void checkStorageGetLastElementNull() {
-        Storage<String> storage = new Storage<>(new String[]{null});
-
-        assertNull(storage.getLast());
-    }
-
-
-    @Test
-    void checkStorageGetElementReturnNull() {
-        Storage<String> storage = new Storage<>();
-
-        assertNull(storage.get(11));
     }
 
     @Test

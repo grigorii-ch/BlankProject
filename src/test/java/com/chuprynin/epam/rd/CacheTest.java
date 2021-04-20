@@ -33,7 +33,6 @@ class CacheTest {
         cache.add("Test2", 2);
         cache.add("Test3", 3);
 
-        assertNull(cache.get(1), "Test1");
         assertEquals(cache.get(2), "Test2");
         assertEquals(cache.get(3), "Test3");
     }
@@ -99,14 +98,6 @@ class CacheTest {
         cache.add("Test1", 1);
 
         assertEquals(cache.get(1), "Test1");
-    }
-
-    @Test
-    void checkCacheGetNull() throws CacheElementNotExists {
-        Cache<String> cache = new Cache<>(1);
-        cache.add("Test1", 1);
-
-        assertNull(cache.get(2));
     }
 
     @Test
