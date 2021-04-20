@@ -70,4 +70,14 @@ class StorageTest {
                 }
         );
     }
+
+    @Test
+    void checkStorageClear() {
+        Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3"});
+        storage.clear();
+        Object[] storage1 = storage.getStorage();
+        assertNull(storage1[0]);
+
+
+    }
 }

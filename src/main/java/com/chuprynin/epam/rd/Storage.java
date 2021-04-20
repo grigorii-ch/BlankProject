@@ -2,12 +2,10 @@ package com.chuprynin.epam.rd;
 
 import com.chuprynin.epam.rd.exceptions.CacheElementNotExists;
 import com.chuprynin.epam.rd.exceptions.StorageElementNotExists;
-import lombok.Builder;
-import lombok.Data;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 @Slf4j
@@ -66,10 +64,6 @@ public class Storage<T> {
      */
     public void delete() {
         T tmpElement = this.getLast();
-
-        if (Objects.isNull(tmpElement)) {
-            return;
-        }
 
         if (cache.isPresent(tmpElement)) {
             cache.delete(tmpElement);

@@ -1,6 +1,7 @@
 package com.chuprynin.epam.rd;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
@@ -9,7 +10,8 @@ import java.util.Objects;
  *
  * @param <T>
  */
-@Data
+@Getter
+@Setter
 public class CacheElement<T> {
     private T element;
     private int index;

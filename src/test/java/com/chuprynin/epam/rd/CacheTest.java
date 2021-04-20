@@ -107,4 +107,13 @@ class CacheTest {
             cache.add(null, 100);
         });
     }
+
+    @Test
+    void checkCacheClear() throws CacheElementNotExists {
+        Cache<String> cache = new Cache<>(1);
+        cache.add("Test1", 1);
+        cache.clear();
+        assertNull(cache.getCache()[0]);
+
+    }
 }

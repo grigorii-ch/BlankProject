@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 public class Main {
     public static void main(String[] args) {
         log.info("Старт программы");
-        log.debug("Пример проверки класса Cache");
         Cache<String> cacheString = new Cache<>(5);
         try {
             cacheString.add("Test1", 1);
@@ -18,7 +17,6 @@ public class Main {
         } catch (CacheElementNotExists e) {
             log.warn("Ошибка {}", e.getMessage(), e);
         }
-
         log.debug("Добавили 5 элементов: {}", cacheString);
 
         log.debug("Получаем 3 элемент по index: {}", cacheString.get(3));
@@ -33,20 +31,14 @@ public class Main {
         cacheString.clear();
         log.debug("Очистить : {}", cacheString.toString());
 
+        Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3"});
+        log.debug("Создание класса Storage через конструктор с 3 элементами: {}", storage);
 
-        log.debug("Пример проверки класса Storage");
-        Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3", "Test4", "Test5"});
-        log.debug("Создание через конструктор с 5 элементами: {}", storage);
-
-
-        storage.add("TRATATA0");
         storage.add("TRATATA1");
         storage.add("TRATATA2");
         storage.add("TRATATA3");
-        storage.add("TRATATA4");
-        storage.add("TRATATA5");
 
-        log.debug("Добавление 5 новых элементов : {}", storage);
+        log.debug("Добавление 3 новых элементов : {}", storage);
 
         log.debug("Получить последний элемент: {}", storage.getLast());
 
