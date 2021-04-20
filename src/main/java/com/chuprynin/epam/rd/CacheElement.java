@@ -3,24 +3,29 @@ package com.chuprynin.epam.rd;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Objects;
-
 /**
  * Параметризированный класс, модель - хранения элементов в классе Кэш
  *
- * @param <T>
+ * @param <T> - Тип которым будет параметризирован класс.
+ *
  */
 @Getter
 @Setter
 public class CacheElement<T> {
+    /**
+     * элемент типа Т
+     */
     private T element;
+    /**
+     * индекс с которым был запрос элемента из массива
+     */
     private int index;
 
     /**
      * Дефолтный конструктор
      *
-     * @param element
-     * @param index
+     * @param element элемент типа Т
+     * @param index индекс элемента с которым был запрос элемента из массива
      */
     public CacheElement(T element, int index) {
         this.element = element;
@@ -28,15 +33,10 @@ public class CacheElement<T> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CacheElement<?> that = (CacheElement<?>) o;
-        return index == that.index && Objects.equals(element, that.element);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(element, index);
+    public String toString() {
+        return "CacheElement{" +
+                "element=" + element +
+                ", index=" + index +
+                '}';
     }
 }

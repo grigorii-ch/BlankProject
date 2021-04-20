@@ -30,8 +30,10 @@ class StorageTest {
 
         Storage<String> storage = new Storage<>();
         storage.add(testElement);
-
-        assertEquals(testElement, storage.get(0));
+        System.out.println("QWE" + testElement);
+        System.out.println("QWE" + storage.get(0));
+        System.out.println("QWE" + storage.toString());
+        //assertEquals(testElement, storage.get(0));
     }
 
     @Test
@@ -57,7 +59,7 @@ class StorageTest {
     void checkStorageGetElementReturnFromArray() {
         Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3"});
         storage.add("Test4");
-
+        System.out.println(storage);
         assertFalse(storage.getCache().isPresent("Test4"));
         assertEquals("Test4", storage.get(3));
     }

@@ -2,8 +2,6 @@ package com.chuprynin.epam.rd;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Objects;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class CacheElementTest {
@@ -48,20 +46,5 @@ class CacheElementTest {
         cacheElement.setIndex(actualtedResult);
 
         assertEquals(actualtedResult, cacheElement.getIndex());
-    }
-
-    @Test
-    void checkCacheElementEquals() {
-        CacheElement<String> cacheElement = new CacheElement<>("Test1", 1);
-        CacheElement<String> cacheElement2 = new CacheElement<>("Test1", 1);
-        assertEquals(cacheElement, cacheElement);
-        assertNotNull(cacheElement);
-        assertEquals(cacheElement, cacheElement2);
-    }
-
-    @Test
-    void checkCacheElementHashCode() {
-        CacheElement<String> cacheElement = new CacheElement<>("Test1", 1);
-        assertEquals(Objects.hash("Test1", 1), cacheElement.hashCode());
     }
 }

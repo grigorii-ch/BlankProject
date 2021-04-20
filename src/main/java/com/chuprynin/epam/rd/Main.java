@@ -29,7 +29,7 @@ public class Main {
         log.debug("Удалить Test1 : {}", cacheString);
 
         cacheString.clear();
-        log.debug("Очистить : {}", cacheString.toString());
+        log.debug("Очистить : {}", cacheString);
 
         Storage<String> storage = new Storage<>(new String[]{"Test1", "Test2", "Test3"});
         log.debug("Создание класса Storage через конструктор с 3 элементами: {}", storage);
