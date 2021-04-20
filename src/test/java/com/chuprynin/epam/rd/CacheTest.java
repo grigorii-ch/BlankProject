@@ -112,9 +112,8 @@ class CacheTest {
     @Test
     void checkCacheAddWithCacheElementNotExistsException() {
         Assertions.assertThrows(CacheElementNotExists.class, () -> {
-                    Cache<String> cache = new Cache<>(1);
-                    cache.add(null, 100);
-                }
-        );
+            Cache<String> cache = new Cache<>(1);
+            cache.add(null, 100);
+        });
     }
 }
