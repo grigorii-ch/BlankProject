@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class FileHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    private static final String FILE = "src\\main\\resources\\file.txt";
+    private static final String FILE = "src/main/resources/file.txt";
 
     public static String getDataFromFile() {
         try {

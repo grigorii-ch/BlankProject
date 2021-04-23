@@ -43,7 +43,7 @@ public class Process {
         if (loockAnnotations(aClass)) {
             returnObject =  fillVariables(aClass, object);
         }
-        logger.info("Возвращаемый обьект: {}", returnObject.toString());
+        logger.info("Возвращаемый объект: {}", returnObject.toString());
         return returnObject;
     }
 
@@ -71,12 +71,12 @@ public class Process {
     }
 
     /**
-     * Метод заполнене полей класса , если установленна аннотация Value
-     * если в аннотации указан парамет path значения будут подтянуты из файла
+     * Метод заполнения полей класса , если установлена аннотация Value
+     * если в аннотации указан параметр path значения будут подтянуты из файла
      *
      * @param object             - обьект класса
      * @param methodList         - список методов
-     * @param fileDataAnnotation - значения для заполения из файла
+     * @param fileDataAnnotation - значения для запыления из файла
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
@@ -119,12 +119,12 @@ public class Process {
     }
 
     /**
-     * Метод заполнене полей класса через методы, если установленна аннотация Value
-     * если в аннотации указан парамет path значения будут подтянуты из файла
+     * Метод заполнения полей класса через методы, если установлена аннотация Value
+     * если в аннотации указан параметр path значения будут подтянуты из файла
      *
-     * @param object             - обьект класса
+     * @param object             - объект класса
      * @param fieldList          - список методов
-     * @param fileDataAnnotation - значения для заполения из файла
+     * @param fileDataAnnotation - значения для запыления из файла
      * @throws IllegalAccessException
      * @throws NoSuchMethodException
      */
@@ -170,7 +170,7 @@ public class Process {
      * Метод для получения дефолтного значения аннотации Value
      *
      * @return дефолтное значение аннотации Value
-     * @throws NoSuchMethodException - если у аннотации отсутсвует параметр value
+     * @throws NoSuchMethodException - если у аннотации отсутствует параметр value
      */
     private String getDefauiltValue() throws NoSuchMethodException {
         Class<?> clazz = Value.class;
@@ -179,7 +179,7 @@ public class Process {
     }
 
     /**
-     * Метод вызова проверки и нотификации о резкльтатах проверки класса объекта
+     * Метод вызова проверки и нотификации о результатах проверки класса объекта
      *
      * @param aClass - класс объекта, в котором будут проверяться аннотации
      * @return boolean true/false в зависимости от проверки по правилам
@@ -225,7 +225,7 @@ public class Process {
 
     /**
      * Метод проверки наличия аннотации Value у полей и методов класса
-     * на основе их колличества
+     * на основе их количества
      *
      * @param fieldCount  - int поля класса с аннотацией Value
      * @param methodCount - int методы класса с аннотацией Value

@@ -10,9 +10,7 @@ public class Main {
 
     public static void main(String[] args)  {
         logger.info("Начало программы");
-
         Process process = new Process();
-
         try {
             Human human = new Human();
             human = (Human) process.run(human, human.getClass());
