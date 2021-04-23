@@ -2,7 +2,7 @@ package com.chuprynin.epam.rd.pojo;
 
 import com.chuprynin.epam.rd.annotation.Value;
 
-public class Buinding {
+public class Building {
     @Value
     private int number;
     @Value
