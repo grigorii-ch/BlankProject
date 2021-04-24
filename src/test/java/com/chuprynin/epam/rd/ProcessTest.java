@@ -16,7 +16,7 @@ class ProcessTest {
         Human human = new Human();
         Process process = new Process();
         human = (Human) process.run(human, human.getClass());
-        assertEquals(human.getAge(), 7777777);
+        assertEquals(human.getAge(), 25);
         assertEquals(human.getName(), ("Vasia"));
     }
 
@@ -25,7 +25,7 @@ class ProcessTest {
         HumanTestFields humanTestFields = new HumanTestFields();
         Process process = new Process();
         humanTestFields = (HumanTestFields) process.run(humanTestFields, humanTestFields.getClass());
-        assertEquals(humanTestFields.getAge(), 7777777);
+        assertEquals(humanTestFields.getAge(), 1);
         assertEquals(humanTestFields.getName(), ("TestName"));
     }
 
@@ -34,7 +34,7 @@ class ProcessTest {
         HumanTestMethods humanTestMethods = new HumanTestMethods();
         Process process = new Process();
         humanTestMethods = (HumanTestMethods) process.run(humanTestMethods, humanTestMethods.getClass());
-        assertEquals(humanTestMethods.getAge(), 7777777);
+        assertEquals(humanTestMethods.getAge(), 1);
         assertEquals(humanTestMethods.getName(), ("TestName"));
     }
 
@@ -43,8 +43,8 @@ class ProcessTest {
         HumanTestMethodsFromData humanTestMethodsFromData = new HumanTestMethodsFromData();
         Process process = new Process();
         humanTestMethodsFromData = (HumanTestMethodsFromData) process.run(humanTestMethodsFromData, humanTestMethodsFromData.getClass());
-        assertEquals(humanTestMethodsFromData.getAge(), 99);
-        assertEquals(humanTestMethodsFromData.getName(), ("Vasia"));
+        assertEquals(1, humanTestMethodsFromData.getAge());
+        assertEquals("TestName", humanTestMethodsFromData.getName());
     }
 
     @Test

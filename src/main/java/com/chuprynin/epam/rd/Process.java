@@ -11,10 +11,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Класс для работы с pojo
@@ -26,10 +23,27 @@ import java.util.Objects;
  */
 public class Process {
 
-    /**
-     * Переменная логера
-     */
     private static final Logger logger = LoggerFactory.getLogger(Process.class);
+    private final Map<Class<?>, Class<?>> map = new HashMap<>();
+
+    public Process() {
+        map.put(byte.class, Byte.class);
+        map.put(Byte.class, Byte.class);
+        map.put(short.class, Short.class);
+        map.put(Short.class, Short.class);
+        map.put(int.class, Integer.class);
+        map.put(Integer.class, Integer.class);
+        map.put(long.class, Long.class);
+        map.put(Long.class, Long.class);
+        map.put(float.class, Float.class);
+        map.put(Float.class, Float.class);
+        map.put(double.class, Double.class);
+        map.put(Double.class, Double.class);
+        map.put(char.class, Character.class);
+        map.put(Character.class, Character.class);
+        map.put(boolean.class, Boolean.class);
+        map.put(Boolean.class, Boolean.class);
+    }
 
     /**
      * Основной метод работы класса
@@ -41,7 +55,7 @@ public class Process {
     public Object run(Object object, Class<?> aClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Object returnObject = object;
         if (loockAnnotations(aClass)) {
-            returnObject =  fillVariables(aClass, object);
+            returnObject = fillVariables(aClass, object);
         }
         logger.info("Возвращаемый объект: {}", returnObject.toString());
         return returnObject;
@@ -86,6 +100,7 @@ public class Process {
             String patchValue = method.getAnnotation(Value.class).path();
 
             Method objectMethod = (Method) method;
+            Class<?> objTypeClass = objectMethod.getParameterTypes()[0];
             logger.debug("Обрабатывается метод {}", objectMethod.getName());
             if (!patchValue.trim().isEmpty()) {
                 int dataPosition = 0;
@@ -93,27 +108,61 @@ public class Process {
                     dataPosition = 1;
                 }
                 String[] fileData = fileDataAnnotation.split(",");
-                String dataName = fileData[dataPosition].split("=")[0];
                 String dataValue = fileData[dataPosition].split("=")[1];
-                if (dataName.equals(patchValue)) {
-                    logger.debug("Заполнение из файла");
-                    objectMethod.setAccessible(true);
-                    if (objectMethod.getParameterTypes()[0].getTypeName().equals(String.class.getName())) {
-                        objectMethod.invoke(object, dataValue);
-                    } else {
-                        objectMethod.invoke(object, Integer.valueOf(dataValue));
-                    }
+                if (dataValue.equals(patchValue)) {
+                    parseValue(object, objectMethod, dataValue, objTypeClass);
                     continue;
                 }
+
             }
             String annotationValue = method.getAnnotation(Value.class).value();
             logger.debug("Заполнение из аннотации");
-            if (objectMethod.getParameterTypes()[0].getTypeName().equals(String.class.getName())) {
-                objectMethod.setAccessible(true);
-                objectMethod.invoke(object, annotationValue);
+            logger.debug("типа поля = {}", objectMethod.getParameterTypes()[0]);
+            parseValue(object, objectMethod, annotationValue, objTypeClass);
+        }
+    }
+
+    private void parseValue(Object object, Field objectField, String annotationValue, Class<?> classType) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class<?> wrapperClass = map.get(classType);
+        objectField.setAccessible(true);
+        if (wrapperClass == null) {
+            objectField.set(object, annotationValue);
+            return;
+        }
+
+        Method method = wrapperClass.getDeclaredMethod("valueOf", String.class);
+        method.setAccessible(true);
+
+        try {
+            objectField.set(object, method.invoke(null, annotationValue));
+        } catch (Exception e) {
+            if (wrapperClass == Boolean.class) {
+                objectField.set(object, method.invoke(null, false));
             } else {
-                objectMethod.setAccessible(true);
-                objectMethod.invoke(object, Integer.valueOf(getDefauiltValue()));
+                objectField.set(object, method.invoke(null, getDefauiltValue()));
+            }
+        }
+    }
+
+    private void parseValue(Object object, Method objectMethod, String annotationValue, Class<?> classType) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class<?> wrapperClass = map.get(classType);
+        if (wrapperClass == null) {
+            objectMethod.invoke(object, annotationValue);
+            return;
+        }
+
+        Method method = wrapperClass.getDeclaredMethod("valueOf", String.class);
+        method.setAccessible(true);
+        objectMethod.setAccessible(true);
+
+
+        try {
+            objectMethod.invoke(object, method.invoke(null, annotationValue));
+        } catch (Exception e) {
+            if (wrapperClass == Boolean.class) {
+                objectMethod.invoke(object, method.invoke(null, false));
+            } else {
+                objectMethod.invoke(object, method.invoke(null, getDefauiltValue()));
             }
         }
     }
@@ -128,7 +177,7 @@ public class Process {
      * @throws IllegalAccessException
      * @throws NoSuchMethodException
      */
-    private void fillFiledValues(Object object, List<AccessibleObject> fieldList, String fileDataAnnotation) throws IllegalAccessException, NoSuchMethodException {
+    private void fillFiledValues(Object object, List<AccessibleObject> fieldList, String fileDataAnnotation) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         for (AccessibleObject field : fieldList) {
             Field objectField = (Field) field;
             logger.debug("Обрабатывается поле {}", objectField.getName());
@@ -142,27 +191,16 @@ public class Process {
                 String[] fileData = fileDataAnnotation.split(",");
                 String dataName = fileData[dataPosition].split("=")[0];
                 String dataValue = fileData[dataPosition].split("=")[1];
-
                 if (dataName.equals(patchValue)) {
                     logger.debug("Заполнение из файла");
-                    objectField.setAccessible(true);
-                    if (objectField.getType().getName().equals(String.class.getName())) {
-                        objectField.set(object, dataValue);
-                    } else {
-                        objectField.set(object, Integer.valueOf(dataValue));
-                    }
+                    parseValue(object, objectField, dataValue, objectField.getType());
+
                     continue;
                 }
             }
             String annotationValue = field.getAnnotation(Value.class).value();
             logger.debug("Заполнение из аннотации");
-            if (objectField.getType().getName().equals(String.class.getName())) {
-                objectField.setAccessible(true);
-                objectField.set(object, annotationValue);
-            } else {
-                objectField.setAccessible(true);
-                objectField.set(object, Integer.valueOf(getDefauiltValue()));
-            }
+            parseValue(object, objectField, annotationValue, objectField.getType());
         }
     }
 

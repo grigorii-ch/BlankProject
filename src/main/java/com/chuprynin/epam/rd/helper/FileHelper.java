@@ -11,11 +11,18 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Класс для работы с файлами
+ */
 public class FileHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static final String FILE = "src/main/resources/file.txt";
 
+    /**
+     * статический метод для получения данных из файла
+     * @return
+     */
     public static String getDataFromFile() {
         try {
             List<String> strings = Files.lines(Paths.get(FILE), StandardCharsets.ISO_8859_1)

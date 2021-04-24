@@ -3,25 +3,48 @@ package com.chuprynin.epam.rd.pojo;
 import com.chuprynin.epam.rd.annotation.Entity;
 import com.chuprynin.epam.rd.annotation.Value;
 
-@Entity()
+/**
+ * Pojo класс с аннотациями: Value на полях и методах класса, Entity на классе
+ */
+@Entity
 public class Human {
     private int age;
     @Value(value = "Grisha", path = "name")
     private String name;
 
+    /**
+     * Возвращает значение поля age
+     *
+     * @return int значение поля age
+     */
     public int getAge() {
         return age;
     }
 
+    /**
+     * Установка значения для поля age
+     *
+     * @param age - int значение
+     */
     @Value(value = "25")
     public void setAge(int age) {
         this.age = age;
     }
 
+    /**
+     * Возвращает значение поля name
+     *
+     * @return String значение поля name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Установка значения для поля name
+     *
+     * @param name - String значение
+     */
     public void setName(String name) {
         this.name = name;
     }
