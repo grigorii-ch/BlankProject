@@ -4,38 +4,23 @@ import com.chuprynin.epam.rd.task1.TaskOne;
 import com.chuprynin.epam.rd.task2.TaskTwo;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         log.info("Старт программы");
-        Optional<ArrayList<String>> optional;
         TaskOne taskOne = new TaskOne();
-        optional = (Optional<ArrayList<String>>) taskOne.run();
-        if (optional.isPresent()) {
-            ArrayList<String> taskOneResult = optional.get();
-            log.debug(taskOneResult.toString());
-        }
-        optional = (Optional<ArrayList<String>>) taskOne.runStream();
-        if (optional.isPresent()) {
-            ArrayList<String> taskOneResultStream = optional.get();
-            log.debug(taskOneResultStream.toString());
-        }
-        log.info("Запуск такси 2 - обычный");
+        List<String> taskOneResult = taskOne.run();
+        log.debug(taskOneResult.toString());
+        List<String> taskOneResultStream = taskOne.runStream();
+        log.debug(taskOneResultStream.toString());
+
         TaskTwo taskTwo = new TaskTwo();
-        Optional optional2 = taskTwo.run();
+        log.debug("Виды колбасы {}", taskTwo.run());
+        log.debug("Виды колбасы Stream {}", taskTwo.runStream());
 
-        if (optional2.isPresent()) {
-            log.debug("Виды колбасы {}", optional2.get());
-        }
-        log.info("Запуск такси 2 - Стримы");
-        optional2 = taskTwo.runStream();
-
-        if (optional2.isPresent()) {
-            log.debug("Виды колбасы {}", optional2.get());
-        }
         log.info("Завершение программы");
     }
 }

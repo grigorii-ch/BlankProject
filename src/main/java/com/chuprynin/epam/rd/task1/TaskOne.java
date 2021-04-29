@@ -6,14 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,43 +29,27 @@ public class TaskOne {
     /**
      * Запуск варианта реализации без стримов
      *
-     * @return Optional объект с листом значений внутри.
+     * @return List<String>
      */
-    public Optional<?> run() {
+    public List<String> run() throws IOException {
         log.info("Запуск такси 1 - обычный");
-        Optional<?> result = Optional.empty();
-        try {
-            List<String> stringListUUID = generateCollection();
-            writeToFile((ArrayList<String>) stringListUUID);
-            ArrayList<Integer> dataForCalculateEndDay = (ArrayList<Integer>) readAdnSumNumbers();
-            result = Optional.of(endDayDate(dataForCalculateEndDay));
-        } catch (Exception e) {
-            log.warn(e.getMessage(), e);
-        }
-        return result;
+
+        writeToFile(generateCollection());
+        List<Integer> dataForCalculateEndDay = readAdnSumNumbers();
+        return endDayDate(dataForCalculateEndDay);
     }
 
     /**
      * Запуск варианта реализации со стримами
      *
-     * @return Optional объект с листом значений внутри.
+     * @return List<String> значений.
      */
-    public Optional<?> runStream() {
+    public List<String> runStream() throws IOException {
         log.info("Запуск такси 1 - Стримы");
-        Optional<?> result = Optional.empty();
-        try {
-            Optional<?> optional = generateCollectionStream();
-            if (!optional.isPresent()) {
-                throw new RuntimeException(TasksHepler.ERR_NEW_COLLECTION);
-            }
-            List<String> stringListUUID = (List<String>) optional.get();
-            writeToFileStream((ArrayList<String>) stringListUUID);
-            ArrayList<Integer> dataForCalculateEndDay = (ArrayList<Integer>) readAdnSumNumbersStream();
-            result = Optional.of(endDayDateStream(dataForCalculateEndDay));
-        } catch (Exception e) {
-            log.warn(e.getMessage(), e);
-        }
-        return result;
+        List<String> stringListUUID = generateCollectionStream();
+            writeToFileStream(stringListUUID);
+            List<Integer> dataForCalculateEndDay = readAdnSumNumbersStream();
+            return endDayDateStream(dataForCalculateEndDay);
     }
 
     /**
@@ -78,19 +59,9 @@ public class TaskOne {
      * @return List<String> со значениями UUID
      */
     private List<String> generateCollection() {
-        List<String> listUUIDs = null;
-        try {
-            Optional<?> optional = hepler.getNewArrayList();
-            if (optional.isPresent()) {
-                listUUIDs = (List<String>) optional.get();
-            } else {
-                throw new RuntimeException(TasksHepler.ERR_NEW_COLLECTION);
-            }
-            for (int i = 0; i < TaskOne.LIST_UUID_SIZE; i++) {
-                listUUIDs.add(UUID.randomUUID().toString());
-            }
-        } catch (Exception e) {
-            log.warn("Ошибка: {}", e.getMessage(), e);
+        List<String> listUUIDs = hepler.getNewList();
+        for (int i = 0; i < TaskOne.LIST_UUID_SIZE; i++) {
+            listUUIDs.add(UUID.randomUUID().toString());
         }
         return listUUIDs;
     }
@@ -100,22 +71,22 @@ public class TaskOne {
      * заполнение - случайная генерация UUID
      * реализация через стримы
      *
-     * @return Optional объект с List<String> со значениями UUID внутри.
+     * @return List<String> со значениями UUID внутри.
      */
-    private Optional<List<String>> generateCollectionStream() {
+    private List<String> generateCollectionStream() {
         log.debug("Заполнение коллекции");
-        return Optional.of(Stream.generate(UUID::randomUUID)
+        return Stream.generate(UUID::randomUUID)
                 .map(UUID::toString)
                 .limit(TaskOne.LIST_UUID_SIZE)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
     }
 
     /**
      * Метод для записи в файл
      *
-     * @param strings - ArrayList<String> с данными для записи
+     * @param strings - List<String> с данными для записи
      */
-    private void writeToFile(ArrayList<String> strings) {
+    private void writeToFile(List<String> strings) {
         log.info("Запись в файл {}", TaskOne.FILE_NAME);
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(TaskOne.FILE_NAME))) {
             for (String s : strings) {
@@ -130,9 +101,9 @@ public class TaskOne {
     /**
      * Метод для записи в файл, с помощью стримов
      *
-     * @param strings - ArrayList<String> с данными для записи
+     * @param strings - List<String> с данными для записи
      */
-    private void writeToFileStream(ArrayList<String> strings) throws IOException {
+    private void writeToFileStream(List<String> strings) throws IOException {
         log.info("Запись в файл {}", TaskOne.FILE_NAME_STREAM);
         Files.write(Path.of(TaskOne.FILE_NAME_STREAM), strings);
     }
@@ -141,31 +112,18 @@ public class TaskOne {
      * Считывание данных из файлы, получение цифровых значений из UUID и суммировании
      *
      * @return List результатов суммирования
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
      */
-    private List<Integer> readAdnSumNumbers() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Optional<?> optional = hepler.getNewArrayList();
-        if (optional.isEmpty()) {
-            throw new RuntimeException(TasksHepler.ERR_NEW_COLLECTION);
-        }
-        ArrayList<Integer> arrayList = (ArrayList<Integer>) optional.get();
-        try {
-            List<String> strings = hepler.readFromFile(TaskOne.FILE_NAME);
-
-            for (String s : strings) {
-                int elementSum = hepler.getSumfromUUID(s);
-                if (elementSum > 100) {
-                    arrayList.add(elementSum);
-                    log.trace("Результат суммирования {}", elementSum);
-                }
+    private List<Integer> readAdnSumNumbers() throws IOException {
+        List<Integer> newList = hepler.getNewList();
+        List<String> strings = hepler.readFromFile(TaskOne.FILE_NAME);
+        for (String s : strings) {
+            int elementSum = hepler.getSumfromUUID(s);
+            if (elementSum > 100) {
+                newList.add(elementSum);
+                log.trace("Результат суммирования {}", elementSum);
             }
-        } catch (IOException e) {
-            log.warn("Ошибка: {}", e.getMessage(), e);
         }
-        return arrayList;
+        return newList;
     }
 
     /**
@@ -173,10 +131,6 @@ public class TaskOne {
      * с помощью стримов
      *
      * @return List результатов суммирования
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
      */
     private List<Integer> readAdnSumNumbersStream() throws IOException {
         List<String> strings = hepler.readFromFile(TaskOne.FILE_NAME_STREAM);
@@ -197,20 +151,12 @@ public class TaskOne {
     /**
      * Вычисление дат конца света
      *
-     * @param dataDayMonth ArrayList<Integer> данные для вычислений
-     * @return ArrayList<String> с результатами вычислений
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
+     * @param dataDayMonth List<Integer> данные для вычислений
+     * @return List<String> с результатами вычислений
      */
-    private ArrayList<String> endDayDate(ArrayList<Integer> dataDayMonth) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Optional<?> optional = hepler.getNewArrayList();
-        if (optional.isEmpty()) {
-            throw new RuntimeException(TasksHepler.ERR_NEW_COLLECTION);
-        }
+    private List<String> endDayDate(List<Integer> dataDayMonth) {
         log.debug("Вычисление даты конца света");
-        ArrayList<String> endDates = (ArrayList<String>) optional.get();
+        List<String> endDates = hepler.getNewList();
         for (int i : dataDayMonth) {
             String data = String.valueOf(i);
             LocalDateTime localDate = LocalDateTime.now()
@@ -225,10 +171,10 @@ public class TaskOne {
     /**
      * Вычисление дат конца света
      *
-     * @param dataDayMonth ArrayList<Integer> данные для вычислений
-     * @return ArrayList<String> с результатами вычислений
+     * @param dataDayMonth List<Integer> данные для вычислений
+     * @return List<String> с результатами вычислений
      */
-    private List<String> endDayDateStream(ArrayList<Integer> dataDayMonth) {
+    private List<String> endDayDateStream(List<Integer> dataDayMonth) {
         log.debug("Вычистание даты конца света");
         return dataDayMonth.stream()
                 .map(e -> {

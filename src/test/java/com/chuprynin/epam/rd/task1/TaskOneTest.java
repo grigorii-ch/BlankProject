@@ -1,24 +1,21 @@
 package com.chuprynin.epam.rd.task1;
 
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskOneTest {
 
     @Test
-    void run() {
+    void run() throws IOException {
         TaskOne taskOne = new TaskOne();
-        Optional optional = taskOne.run();
-        assertTrue(optional.isPresent());
+        assertTrue(taskOne.run().size() > 0);
     }
 
     @Test
-    void runStream() {
+    void runStream() throws IOException {
         TaskOne taskOne = new TaskOne();
-        Optional optional = taskOne.runStream();
-        assertTrue(optional.isPresent());
+        assertTrue(taskOne.runStream().size() > 0);
     }
 }

@@ -1,9 +1,8 @@
 package com.chuprynin.epam.rd.task2;
 
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -14,18 +13,16 @@ class TaskTwoTest {
      * Провека задания Test1
      */
     @Test
-    void run() {
+    void run() throws IOException {
         TaskTwo taskTwo = new TaskTwo();
-        Optional optional = taskTwo.run();
-        assertTrue(optional.isPresent());
+        assertTrue(taskTwo.run().size() > 0);
     }
     /**
      * Провека задания Test1
      */
     @Test
-    void runStream() {
+    void runStream() throws IOException {
         TaskTwo taskTwo = new TaskTwo();
-        Optional optional = taskTwo.runStream();
-        assertTrue(optional.isPresent());
+        assertTrue(taskTwo.runStream().size() > 0);
     }
 }
