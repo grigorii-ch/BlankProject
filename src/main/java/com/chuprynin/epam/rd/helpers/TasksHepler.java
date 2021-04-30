@@ -1,11 +1,8 @@
 package com.chuprynin.epam.rd.helpers;
 
-import com.chuprynin.epam.rd.task1.TaskOne;
 import com.chuprynin.epam.rd.task2.pojo.Sausage;
 import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -27,7 +24,8 @@ public class TasksHepler {
      */
     public List<String> readFromFile(String fileName) throws IOException {
         log.info("Считывание из файла {}", fileName);
-        return Files.lines(Paths.get(fileName)).collect(Collectors.toList());
+        return Files.lines(Paths.get(fileName))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -53,13 +51,12 @@ public class TasksHepler {
      * @throws ArrayIndexOutOfBoundsException
      */
     public Sausage convertToPojo(String parseData) throws ArrayIndexOutOfBoundsException {
-        String[] parsedData = parseData.split(":");
-        try {
-            return new Sausage(parsedData[0], Integer.parseInt(parsedData[1]), Long.parseLong(parsedData[2]));
-        } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn("Ошибка {}", e.getMessage());
-            throw e;
-        }
+        String decodeData = new String(Base64.getDecoder().decode(parseData));
+        String[] parsedData = decodeData.replaceAll(" ", "").split(",");
+        String type = parsedData[0].replaceAll("[type=']", "");
+        String weight = parsedData[1].replaceAll("[weight=]", "");
+        String cost = parsedData[2].replaceAll("[cost=]", "");
+        return new Sausage(type, Integer.parseInt(weight), Long.parseLong(cost));
     }
 
     /**
@@ -69,6 +66,7 @@ public class TasksHepler {
      */
     public List getNewList() {
         log.info("Создана новая коллекция");
-        return Stream.empty().collect(Collectors.toList());
+        return Stream.empty()
+                .collect(Collectors.toList());
     }
 }

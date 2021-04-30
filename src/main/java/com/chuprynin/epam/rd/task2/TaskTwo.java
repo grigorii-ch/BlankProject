@@ -13,8 +13,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TaskTwo {
 
-    private final static String PATCH_FILE = "src/main/resources/sausages.txt";
-    private final String SAUSAGE_ERR_MESSAGE = "Не удалось загрузить данные из файла {}";
+    private final static String PATCH_FILE = "src/main/resources/File.txt";
 
     TasksHepler hepler = new TasksHepler();
 
@@ -23,7 +22,7 @@ public class TaskTwo {
      * @return
      */
     public List<Sausage> run() throws IOException {
-        log.info("Запуск такси 2 - обычный");
+        log.info("Запуск таски 2 - обычный");
         return getListSausages();
     }
 
@@ -32,7 +31,7 @@ public class TaskTwo {
      * @return
      */
     public List<Sausage> runStream() throws IOException {
-        log.info("Запуск такси 2 - Стримы");
+        log.info("Запуск таски 2 - Стримы");
         return getListSausagesStream();
     }
 
@@ -44,7 +43,7 @@ public class TaskTwo {
      */
     private List<Sausage> getListSausages() throws IOException {
         List<String> stringList = hepler.readFromFile(TaskTwo.PATCH_FILE);
-        List<Sausage> sausages = hepler.getNewList();;
+        List<Sausage> sausages = hepler.getNewList();
         for (String s : stringList) {
             try {
                 sausages.add(hepler.convertToPojo(s));
@@ -64,6 +63,8 @@ public class TaskTwo {
      */
     private List<Sausage> getListSausagesStream() throws IOException, ArrayIndexOutOfBoundsException {
         List<String> stringList = hepler.readFromFile(TaskTwo.PATCH_FILE);
-        return stringList.stream().map(hepler::convertToPojo).collect(Collectors.toList());
+        return stringList.stream()
+                .map(hepler::convertToPojo)
+                .collect(Collectors.toList());
     }
 }

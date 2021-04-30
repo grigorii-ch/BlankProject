@@ -17,15 +17,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.chuprynin.epam.rd.task1.TaskOne" level="debug" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-    </logger>
-    <logger name="com.chuprynin.epam.rd.task2.TaskTwo" level="debug" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-    </logger>
-    <logger name="com.chuprynin.epam.rd.Main" level="debug" additivity="false">
+    <logger name="com.chuprynin.epam.rd" level="debug">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>

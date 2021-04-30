@@ -16,11 +16,9 @@ public class Main {
         log.debug(taskOneResult.toString());
         List<String> taskOneResultStream = taskOne.runStream();
         log.debug(taskOneResultStream.toString());
-
         TaskTwo taskTwo = new TaskTwo();
         log.debug("Виды колбасы {}", taskTwo.run());
         log.debug("Виды колбасы Stream {}", taskTwo.runStream());
-
         log.info("Завершение программы");
     }
 }

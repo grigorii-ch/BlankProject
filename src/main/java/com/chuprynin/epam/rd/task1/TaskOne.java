@@ -32,8 +32,7 @@ public class TaskOne {
      * @return List<String>
      */
     public List<String> run() throws IOException {
-        log.info("Запуск такси 1 - обычный");
-
+        log.info("Запуск таски 1 - обычный");
         writeToFile(generateCollection());
         List<Integer> dataForCalculateEndDay = readAdnSumNumbers();
         return endDayDate(dataForCalculateEndDay);
@@ -45,11 +44,11 @@ public class TaskOne {
      * @return List<String> значений.
      */
     public List<String> runStream() throws IOException {
-        log.info("Запуск такси 1 - Стримы");
+        log.info("Запуск таски 1 - Стримы");
         List<String> stringListUUID = generateCollectionStream();
-            writeToFileStream(stringListUUID);
-            List<Integer> dataForCalculateEndDay = readAdnSumNumbersStream();
-            return endDayDateStream(dataForCalculateEndDay);
+        writeToFileStream(stringListUUID);
+        List<Integer> dataForCalculateEndDay = readAdnSumNumbersStream();
+        return endDayDateStream(dataForCalculateEndDay);
     }
 
     /**
