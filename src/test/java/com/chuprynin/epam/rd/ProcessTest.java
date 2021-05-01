@@ -38,8 +38,6 @@ public class ProcessTest {
         Student student = new Student();
         Process process = new Process();
         student = (Student) process.run(student, student.getClass());
-        System.out.println(student.getAge());
-        System.out.println(student.getName());
         assertEquals(student.getAge(), 128);
         assertEquals(student.getName(), ("Vasia"));
     }
