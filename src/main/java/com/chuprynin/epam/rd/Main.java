@@ -2,6 +2,7 @@ package com.chuprynin.epam.rd;
 
 import com.chuprynin.epam.rd.task1.TaskOne;
 import com.chuprynin.epam.rd.task2.TaskTwo;
+import com.chuprynin.epam.rd.task3.FileSystemProvider;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -19,6 +20,9 @@ public class Main {
         TaskTwo taskTwo = new TaskTwo();
         log.debug("Виды колбасы {}", taskTwo.run());
         log.debug("Виды колбасы Stream {}", taskTwo.runStream());
+        FileSystemProvider fileSystemProvider = new FileSystemProvider();
+        fileSystemProvider.run("src/main",0);
+        log.debug(fileSystemProvider.getTreePatch());
         log.info("Завершение программы");
     }
 }

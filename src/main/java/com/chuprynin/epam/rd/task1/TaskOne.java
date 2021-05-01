@@ -157,10 +157,7 @@ public class TaskOne {
         log.debug("Вычисление даты конца света");
         List<String> endDates = hepler.getNewList();
         for (int i : dataDayMonth) {
-            String data = String.valueOf(i);
-            LocalDateTime localDate = LocalDateTime.now()
-                    .plusMonths(Long.parseLong(data.substring(0, 1)))
-                    .plusDays(Long.parseLong(data.substring(1, 2)));
+            LocalDateTime localDate = getDateTime(String.valueOf(i));
             endDates.add(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(localDate));
             log.trace("Дата после вычислений {}", localDate);
         }
@@ -177,13 +174,23 @@ public class TaskOne {
         log.debug("Вычистание даты конца света");
         return dataDayMonth.stream()
                 .map(e -> {
-                    String str = String.valueOf(e);
-                    LocalDateTime localDate = LocalDateTime.now()
-                            .plusMonths(Long.parseLong(str.substring(0, 1)))
-                            .plusDays(Long.parseLong(str.substring(1, 2)));
+                    LocalDateTime localDate = getDateTime(String.valueOf(e));
                     log.trace("Дата после вычислений {}", localDate);
                     return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(localDate);
                 })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Метод для парсинга даных и преврашения в формат даты
+     *
+     * @param s Строка с данными
+     * @return дата, с корректировками входных данных
+     */
+    private LocalDateTime getDateTime(String s) {
+        String str = s;
+        return LocalDateTime.now()
+                .plusMonths(Long.parseLong(str.substring(0, 1)))
+                .plusDays(Long.parseLong(str.substring(1, 2)));
     }
 }
