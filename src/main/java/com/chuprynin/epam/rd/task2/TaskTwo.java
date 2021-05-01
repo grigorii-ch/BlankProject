@@ -22,7 +22,6 @@ public class TaskTwo {
      * @return
      */
     public List<Sausage> run() throws IOException {
-        log.info("Запуск таски 2 - обычный");
         return getListSausages();
     }
 
@@ -31,7 +30,6 @@ public class TaskTwo {
      * @return
      */
     public List<Sausage> runStream() throws IOException {
-        log.info("Запуск таски 2 - Стримы");
         return getListSausagesStream();
     }
 
