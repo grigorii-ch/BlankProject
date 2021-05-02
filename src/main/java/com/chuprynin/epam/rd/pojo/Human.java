@@ -8,8 +8,9 @@ import com.chuprynin.epam.rd.annotation.Value;
  */
 @Entity
 public class Human {
+    @Value(value = "99")
     private int age;
-    @Value(value = "Grisha", path = "name")
+    @Value(value = "Grisha")
     private String name;
 
     /**
@@ -26,7 +27,7 @@ public class Human {
      *
      * @param age - int значение
      */
-    @Value(value = "25")
+    @Value(value = "99")
     public void setAge(int age) {
         this.age = age;
     }
@@ -45,6 +46,7 @@ public class Human {
      *
      * @param name - String значение
      */
+    @Value(value = "Grisha")
     public void setName(String name) {
         this.name = name;
     }

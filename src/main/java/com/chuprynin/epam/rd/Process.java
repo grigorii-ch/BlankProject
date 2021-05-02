@@ -24,8 +24,14 @@ import java.util.*;
 public class Process {
 
     private static final Logger logger = LoggerFactory.getLogger(Process.class);
+    /**
+     * Переменная для хранеия примитивов и оберток
+     */
     private final Map<Class<?>, Class<?>> map = new HashMap<>();
 
+    /**
+     * Конструктор, заполняет мапу map
+     */
     public Process() {
         map.put(byte.class, Byte.class);
         map.put(Byte.class, Byte.class);
@@ -88,7 +94,7 @@ public class Process {
      * Метод заполнения полей класса , если установлена аннотация Value
      * если в аннотации указан параметр path значения будут подтянуты из файла
      *
-     * @param object             - обьект класса
+     * @param object             - объект класса
      * @param methodList         - список методов
      * @param fileDataAnnotation - значения для запыления из файла
      * @throws IllegalAccessException
@@ -107,13 +113,17 @@ public class Process {
                 if (patchValue.equals("age")) {
                     dataPosition = 1;
                 }
-                String[] fileData = fileDataAnnotation.split(",");
-                String dataValue = fileData[dataPosition].split("=")[1];
-                if (dataValue.equals(patchValue)) {
-                    parseValue(object, objectMethod, dataValue, objTypeClass);
-                    continue;
+                try {
+                    String[] fileData = fileDataAnnotation.split(",");
+                    String dataName = fileData[dataPosition].split("=")[0];
+                    String dataValue = fileData[dataPosition].split("=")[1];
+                    if (dataName.equals(patchValue)) {
+                        parseValue(object, objectMethod, dataValue, objTypeClass);
+                        continue;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    logger.warn("Ошибка при заполнении данных из файла, данные будут заполненны из аннотации");
                 }
-
             }
             String annotationValue = method.getAnnotation(Value.class).value();
             logger.debug("Заполнение из аннотации");
@@ -122,6 +132,20 @@ public class Process {
         }
     }
 
+    /**
+     * Метод производит преобразование переданного значения к типу переданного поля.
+     * по переданному типу класса classType
+     * получает из map класс обертку, у которой вызывается метод valueOf
+     * преобразованные данные передаются в поле объекта
+     *
+     * @param object          - объект
+     * @param objectField     - поле
+     * @param annotationValue -значение аннотации
+     * @param classType       - типа класса
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
     private void parseValue(Object object, Field objectField, String annotationValue, Class<?> classType) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class<?> wrapperClass = map.get(classType);
         objectField.setAccessible(true);
@@ -144,18 +168,26 @@ public class Process {
         }
     }
 
+    /**
+     * Метод производит преобразование переданного значения к типу переданного поля.
+     * по переданному типу класса classType
+     * получает из map класс обертку, у которой в вызывается метод valueOf
+     * преобразованные данные передаются в метод объекта
+     *
+     * @param object          - объект
+     * @param objectMethod    - метод
+     * @param annotationValue -значение аннотации
+     * @param classType       - типа класса
+     */
     private void parseValue(Object object, Method objectMethod, String annotationValue, Class<?> classType) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class<?> wrapperClass = map.get(classType);
         if (wrapperClass == null) {
             objectMethod.invoke(object, annotationValue);
             return;
         }
-
         Method method = wrapperClass.getDeclaredMethod("valueOf", String.class);
         method.setAccessible(true);
         objectMethod.setAccessible(true);
-
-
         try {
             objectMethod.invoke(object, method.invoke(null, annotationValue));
         } catch (Exception e) {
@@ -188,14 +220,17 @@ public class Process {
                 if (patchValue.equals("age")) {
                     dataPosition = 1;
                 }
-                String[] fileData = fileDataAnnotation.split(",");
-                String dataName = fileData[dataPosition].split("=")[0];
-                String dataValue = fileData[dataPosition].split("=")[1];
-                if (dataName.equals(patchValue)) {
-                    logger.debug("Заполнение из файла");
-                    parseValue(object, objectField, dataValue, objectField.getType());
-
-                    continue;
+                try {
+                    String[] fileData = fileDataAnnotation.split(",");
+                    String dataName = fileData[dataPosition].split("=")[0];
+                    String dataValue = fileData[dataPosition].split("=")[1];
+                    if (dataName.equals(patchValue)) {
+                        logger.debug("Заполнение из файла");
+                        parseValue(object, objectField, dataValue, objectField.getType());
+                        continue;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    logger.warn("Ошибка при заполнении данных из файла, данные будут заполненны из аннотации");
                 }
             }
             String annotationValue = field.getAnnotation(Value.class).value();
