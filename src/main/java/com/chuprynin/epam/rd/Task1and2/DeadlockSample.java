@@ -29,7 +29,7 @@ public class DeadlockSample {
     /**
      * Блокировка объекта egg, chicken - последовательно
      */
-    Runnable setEgg = () -> {
+    private Runnable setEgg = () -> {
         synchronized (egg) {
             log.debug("Блокируем egg");
             try {
@@ -46,7 +46,7 @@ public class DeadlockSample {
     /**
      * Блокировка объекта chicken, egg - последовательно
      */
-    Runnable setChicken = () -> {
+    private Runnable setChicken = () -> {
         synchronized (chicken) {
             log.debug("Блокируем chicken");
             try {

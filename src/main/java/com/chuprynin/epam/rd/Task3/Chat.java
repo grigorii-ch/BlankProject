@@ -14,15 +14,15 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class Chat {
     private List<String> chatTred = new ArrayList<>();
     private List<Runnable> chatActions = new ArrayList<>();
-    ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+    private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     /**
      * Максимально кол-во сообщений в чате
      */
-    int maxChatSize = 25;
+    private int maxChatSize = 25;
     /**
      * Кол-во операций
      */
-    int maxActionSize = 100;
+    private int maxActionSize = 100;
 
     /**
      * Метод для запуска
