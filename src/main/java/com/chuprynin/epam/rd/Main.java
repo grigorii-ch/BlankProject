@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        RaceConditionSample raceConditionSample = new RaceConditionSample();
+        var raceConditionSample = new RaceConditionSample();
         log.info("Запуск RaceCondition");
         raceConditionSample.runRaceCondition();
         /* Ждем 5 секунд для завершения предыдушей таски */
@@ -17,14 +17,14 @@ public class Main {
         log.info("Запуск решение RaceCondition");
         raceConditionSample.decisionRaceCondition();
         log.info("Запуск решение Deadlock");
-        DeadlockSample deadlockSample = new DeadlockSample();
-        // Вызов метода с 0 таймаутом заблукирует процесс
+        var deadlockSample = new DeadlockSample();
+        // Вызов метода с 0 таймаутом заблокирует процесс
         // deadlockSample.runDeadLock(0);
         deadlockSample.runDeadLock(2000);
 
         Thread.sleep(5000);
-        log.info("Запуск Chat - емкость 100 аппераций, с произвольным колличеством write/read/update");
-        Chat chat = new Chat();
+        log.info("Запуск Chat - емкость 100 операций, с произвольным количеством write/read/update");
+        var chat = new Chat();
         chat.run();
     }
 

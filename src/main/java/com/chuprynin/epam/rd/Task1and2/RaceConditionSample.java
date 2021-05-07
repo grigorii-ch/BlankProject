@@ -15,9 +15,9 @@ public class RaceConditionSample {
      * Метод отображает результат гонки данных
      */
     public void runRaceCondition() {
-        Runnable newEgg = getRunnable();
+        var newEgg = getRunnable();
         for (int i = 0; i < 10; i++) {
-            Thread th = new Thread(newEgg, String.format("Thread: %d", i) );
+            Thread th = new Thread(newEgg, String.format("Thread: %d", i));
             th.start();
             setFirst(CHICKEN);
         }
@@ -27,9 +27,9 @@ public class RaceConditionSample {
      * Метод предотвращает гонку данных путем ожидания предыдущего потока
      */
     public void decisionRaceCondition() throws InterruptedException {
-        Runnable newEgg = getRunnable();
+        var newEgg = getRunnable();
         for (int i = 0; i < 10; i++) {
-            Thread th = new Thread(newEgg, String.format("Thread: %d", i) );
+            Thread th = new Thread(newEgg, String.format("Thread: %d", i));
             th.start();
             th.join();
             setFirst(CHICKEN);
@@ -38,6 +38,7 @@ public class RaceConditionSample {
 
     /**
      * Получение имплементации интерфейса
+     *
      * @return Имплементация интерфейса Runnable
      */
     private Runnable getRunnable() {
@@ -46,6 +47,7 @@ public class RaceConditionSample {
 
     /**
      * Метод для установки и отображения текущего значения
+     *
      * @param first Имплементация интерфейса Runnable
      */
     private void setFirst(String first) {

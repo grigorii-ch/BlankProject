@@ -2,12 +2,16 @@ package com.chuprynin.epam.rd.Task3;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * Класс имитирует работу SMS часа ёмкостью 100 операций
+ * Класс имитирует работу SMS чата ёмкостью 100 операций
  */
 @Slf4j
 @Data
@@ -26,12 +30,13 @@ public class Chat {
 
     /**
      * Метод для запуска
+     * запускаем повторяемый поток для 100 операций с задержкой в секунду
      */
     public void run() {
         imitationChat();
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(100);
         chatActions.forEach(elem -> {
-            Thread th = new Thread(elem);
-            th.start();
+            executor.scheduleWithFixedDelay(elem, 0, 1, TimeUnit.SECONDS);
         });
     }
 
@@ -50,15 +55,16 @@ public class Chat {
 
     /**
      * Метод для добавления записи в чате
+     *
      * @return Имплементация интерфейса Runnable, содержит операцию SMS чата
      */
     private Runnable write() {
         return () -> {
-            readWriteLock.writeLock().lock();
             try {
+                Thread.sleep(20000 + new Random().nextInt(40000));
                 if (chatTred.size() < maxChatSize) {
-                    Thread.sleep(20 + new Random().nextInt(40));
                     String newSms = UUID.randomUUID().toString();
+                    readWriteLock.writeLock().lock();
                     log.debug("Добавление SMS в чат {}", newSms);
                     chatTred.add(newSms);
                 } else {
@@ -74,16 +80,19 @@ public class Chat {
 
     /**
      * Метод для обновления записи в чате
+     *
      * @return Имплементация интерфейса Runnable, содержит операцию SMS чата
      */
     private Runnable update() {
         return () -> {
-            readWriteLock.writeLock().lock();
             try {
+                // Добавил таймаут для update, без задержки - он будет бесконечно обновлять записи
+                Thread.sleep(30000 + new Random().nextInt(20000));
+                readWriteLock.writeLock().lock();
                 if (chatTred.size() > 0) {
-                    int randonSms = new Random().nextInt(chatTred.size());
-                    String tmp = chatTred.get(randonSms);
-                    String newValue = tmp + " changed";
+                    var randonSms = new Random().nextInt(chatTred.size());
+                    var tmp = chatTred.get(randonSms);
+                    var newValue = tmp + " changed";
                     log.debug("Обновление SMS сообщения:{}, новое значение:{}", tmp, newValue);
                     chatTred.remove(randonSms);
                     chatTred.add(randonSms, newValue);
@@ -100,15 +109,16 @@ public class Chat {
 
     /**
      * Метод для считывания (удаления) записи в чате
+     *
      * @return Имплементация интерфейса Runnable, содержит операцию SMS чата
      */
     private Runnable read() {
         return () -> {
-            readWriteLock.writeLock().lock();
             try {
-                Thread.sleep(30 + new Random().nextInt(20));
+                Thread.sleep(30000 + new Random().nextInt(20000));
+                readWriteLock.writeLock().lock();
                 if (chatTred.size() > 0) {
-                    log.debug("Счиьывание SMS записи из чата. {}",chatTred.get(chatTred.size() - 1));
+                    log.debug("Считывание SMS записи из чата. {}", chatTred.get(chatTred.size() - 1));
                     chatTred.remove(chatTred.size() - 1);
                 } else {
                     log.debug("Нет возможности считать - чат пуст.");

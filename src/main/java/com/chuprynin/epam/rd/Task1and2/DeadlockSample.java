@@ -14,16 +14,16 @@ public class DeadlockSample {
 
     /**
      * Запуск процесса имитирующий взаимную блокировку
+     *
      * @param timeout - время таймаута между вызовами, при 0 - произойдет блокировка.
      * @throws InterruptedException - ошибка прерывания процесса
      */
     public void runDeadLock(int timeout) throws InterruptedException {
-        Thread th1 = new Thread(setEgg, "eggThread");
-        Thread th2 = new Thread(setChicken, "chickenThread");
+        var th1 = new Thread(setEgg, "eggThread");
+        var th2 = new Thread(setChicken, "chickenThread");
         th1.start();
         Thread.sleep(timeout);
         th2.start();
-
     }
 
     /**
