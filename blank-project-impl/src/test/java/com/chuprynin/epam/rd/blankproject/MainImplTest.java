@@ -1,4 +1,4 @@
-package com.chuprynin.epam.rd.blankprojectimpl;
+package com.chuprynin.epam.rd.blankproject;
 
 import org.junit.jupiter.api.Test;
 

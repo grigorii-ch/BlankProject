@@ -1,4 +1,4 @@
-package com.chuprynin.epam.rd.blankprojectapi;
+package com.chuprynin.epam.rd.blankproject;
 
 import lombok.extern.slf4j.Slf4j;
 
