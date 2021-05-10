@@ -4,14 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>BlankProject</artifactId>
+    <groupId>com.chuprynin.epam.rd</groupId>
+    <artifactId>blank-project</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
     <modules>
-        <module>BlankProject-api</module>
-        <module>BlankProject-db</module>
-        <module>BlankProject-impl</module>
+        <module>blank-project-api</module>
+        <module>blank-project-db</module>
+        <module>blank-project-impl</module>
     </modules>
 
     <dependencyManagement>
@@ -51,11 +52,21 @@
         <mockito-all.version>1.8.4</mockito-all.version>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>off-test-coverage</id>
+            <properties>
+                <jacoco-maven-plugin.haltOnFailure>false</jacoco-maven-plugin.haltOnFailure>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>11</source>
                     <target>11</target>
@@ -64,6 +75,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
+                <version>3.9.1</version>
                 <configuration>
                     <outputEncoding>UTF-8</outputEncoding>
                 </configuration>
@@ -115,18 +127,11 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
             </plugin>
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>off-test-coverage</id>
-            <properties>
-                <jacoco-maven-plugin.haltOnFailure>false</jacoco-maven-plugin.haltOnFailure>
-            </properties>
-        </profile>
-    </profiles>
 </project>
