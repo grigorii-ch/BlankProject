@@ -1,9 +1,9 @@
-package com.chuprynin.epam.rd.blank.project.api;
+package com.chuprynin.epam.rd.blankprojectdb;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class MainApi {
+public class MainDb {
     public static void main(String[] args) {
         log.debug("Hello world!");
     }
