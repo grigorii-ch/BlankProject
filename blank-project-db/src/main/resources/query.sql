@@ -6,11 +6,11 @@ select * from products where category in (8,15);
 
 select * from products where price between 10 and 20;
 
-select * from orders where orderdate between '2004-01-05' and '2004-02-05';
+select * from orders where orderdate between to_date('2004-01-05','yyyy-mm-dd') and to_date('2004-02-05','yyyy-mm-dd');
 
-select sum(1), customerid from orders group by customerid order by 1 desc;
+select count(1), customerid from orders group by customerid order by 1 desc;
 
-select sum(totalamount) from orders group by customerid, orderdate having sum(totalamount) > 100; 
+select sum(totalamount), customerid, orderdate from orders group by customerid, orderdate having sum(totalamount) > 100;
 
 select c.firstname, c.lastname, p.title, o.orderdate 
 from customers c, orders o, orderlines o2, products p 
