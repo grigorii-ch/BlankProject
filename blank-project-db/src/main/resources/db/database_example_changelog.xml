@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="1" author="Grigoriy">
+        <createTable tableName="Customer">
+            <column name="CustomerId" type="int">
+                <constraints primaryKey="true" primaryKeyName="Customer_CustomerId" nullable="false"/>
+            </column>
+            <column name="CustomerName" type="varchar(50)"/>
+            <column name="Phone" type="varchar(20)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="Order">
+            <column name="OrderId" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="OrderNumber" type="varchar(10)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="CustomerId" type="int">
+                <constraints foreignKeyName="Order_CustomerId" referencedTableName="Customer" referencedColumnNames="CustomerId"/>
+            </column>
+        </createTable>
+        <createTable tableName="Supplier">
+            <column name="SupplieId" type="int">
+                <constraints primaryKey="true" primaryKeyName="Supplie_SupplieId" nullable="false"/>
+            </column>
+            <column name="CompanyName" type="varchar(40)"/>
+            <column name="Phone" type="varchar(20)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="Product">
+            <column name="ProductId" type="int">
+                <constraints primaryKey="true" primaryKeyName="Product_ProductId" nullable="false"/>
+            </column>
+            <column name="ProductName" type="varchar(50)"/>
+            <column name="SupplieId" type="int">
+                <constraints foreignKeyName="ProductId_SupplieId" referencedTableName="Supplier" referencedColumnNames="SupplieId"/>
+            </column>
+            <column name="UnitPrice" type="decimal(12,2)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="IsDiscontined" type="boolean"/>
+        </createTable>
+        <createTable tableName="OrderProduct">
+            <column name="OrderId" type="int">
+                <constraints foreignKeyName="OrderProduct_OrderId" referencedTableName="Order" referencedColumnNames="OrderId"/>
+            </column>
+            <column name="ProductId" type="int">
+                <constraints foreignKeyName="OrderProduct_ProductId" referencedTableName="Product" referencedColumnNames="ProductId"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -28,6 +28,43 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
     </dependencies>
+
+    <properties>
+        <db.host>localhost</db.host>
+        <db.port>5432</db.port>
+        <db.name>epamcourses</db.name>
+        <db.schema>chuprynin</db.schema>
+        <db.user>usr</db.user>
+        <db.password>pass</db.password>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase.version}</version>
+                <configuration>
+                    <outputFileEncoding>UTF-8</outputFileEncoding>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>
+                        jdbc:postgresql://${db.host}:${db.port}/${db.name}?currentSchema=${db.schema}
+                    </url>
+                    <username>${db.user}</username>
+                    <password>${db.password}</password>
+                    <changeLogFile>src\main\resources\db\database_example_changelog.xml</changeLogFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
