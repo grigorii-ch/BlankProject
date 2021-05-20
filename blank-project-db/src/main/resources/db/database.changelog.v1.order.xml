@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="v1 create table order 20.05.2021" author="Grigoriy Chuprynin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="order"/>
+            </not>
+        </preConditions>
+        <createTable tableName="order">
+            <column name="orderid" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ordernumber" type="varchar(10)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="customerid" type="int">
+                <constraints foreignKeyName="Order_CustomerId" referencedTableName="customer" referencedColumnNames="customerid"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

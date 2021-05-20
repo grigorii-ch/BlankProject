@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="v1 create table orderproduct 20.05.2021" author="Grigoriy Chuprynin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="orderproduct"/>
+            </not>
+        </preConditions>
+        <createTable tableName="orderproduct">
+            <column name="orderid" type="int">
+                <constraints foreignKeyName="orderproduct_orderid" referencedTableName="order" referencedColumnNames="orderid"/>
+            </column>
+            <column name="productid" type="int">
+                <constraints foreignKeyName="orderproduct_productid" referencedTableName="product" referencedColumnNames="productid"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

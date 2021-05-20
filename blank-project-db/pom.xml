@@ -11,6 +11,15 @@
 
     <artifactId>blank-project-db</artifactId>
 
+    <properties>
+        <liquibase.host>localhost</liquibase.host>
+        <liquibase.port>5432</liquibase.port>
+        <liquibase.name>epamcourses</liquibase.name>
+        <liquibase.schema>chuprynin</liquibase.schema>
+        <liquibase.user>usr</liquibase.user>
+        <liquibase.password>pass</liquibase.password>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -38,15 +47,6 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <db.host>localhost</db.host>
-        <db.port>5432</db.port>
-        <db.name>epamcourses</db.name>
-        <db.schema>chuprynin</db.schema>
-        <db.user>usr</db.user>
-        <db.password>pass</db.password>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
@@ -57,11 +57,11 @@
                     <outputFileEncoding>UTF-8</outputFileEncoding>
                     <driver>org.postgresql.Driver</driver>
                     <url>
-                        jdbc:postgresql://${db.host}:${db.port}/${db.name}?currentSchema=${db.schema}
+                        jdbc:postgresql://${liquibase.host}:${liquibase.port}/${liquibase.name}?currentSchema=${liquibase.schema}
                     </url>
-                    <username>${db.user}</username>
-                    <password>${db.password}</password>
-                    <changeLogFile>src\main\resources\db\database_example_changelog.xml</changeLogFile>
+                    <username>${liquibase.user}</username>
+                    <password>${liquibase.password}</password>
+                    <changeLogFile>src\main\resources\db\database_blankproject_changelog.xml</changeLogFile>
                 </configuration>
             </plugin>
         </plugins>

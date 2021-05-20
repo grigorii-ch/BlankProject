@@ -1,5 +1,5 @@
-drop schema if exists chuprynin;
-create schema if not exists chuprynin;
-drop user if exists usr;
-create user usr with password 'pass';
-grant all on schema chuprynin to usr;
+DROP SCHEMA if EXISTS chuprynin;
+CREATE SCHEMA if NOT EXISTS chuprynin;
+DROP USER if EXISTS usr;
+CREATE USER usr WITH password 'pass';
+GRANT ALL ON SCHEMA chuprynin TO usr;
