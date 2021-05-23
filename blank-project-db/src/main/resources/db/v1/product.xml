@@ -10,12 +10,12 @@
             </not>
         </preConditions>
         <createTable tableName="product">
-            <column name="productid" type="int">
+            <column name="productid" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="Product_ProductId" nullable="false"/>
             </column>
             <column name="productname" type="varchar(50)"/>
-            <column name="supplieid" type="int">
-                <constraints foreignKeyName="ProductId_SupplieId" referencedTableName="supplier" referencedColumnNames="supplieid"/>
+            <column name="supplierid" type="int">
+                <constraints foreignKeyName="ProductId_SupplierId" referencedTableName="supplier" referencedColumnNames="supplierid"/>
             </column>
             <column name="unitprice" type="decimal(12,2)">
                 <constraints nullable="true"/>

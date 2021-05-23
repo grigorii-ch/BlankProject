@@ -10,8 +10,8 @@
             </not>
         </preConditions>
         <createTable tableName="order">
-            <column name="orderid" type="int">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="orderid" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="Order_OrderId" nullable="false"/>
             </column>
             <column name="ordernumber" type="varchar(10)">
                 <constraints nullable="true"/>
@@ -19,6 +19,8 @@
             <column name="customerid" type="int">
                 <constraints foreignKeyName="Order_CustomerId" referencedTableName="customer" referencedColumnNames="customerid"/>
             </column>
+            <column name="orderdate" type="date"/>
+            <column name="totalamount" type="decimal(12,2)"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

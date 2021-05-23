@@ -10,7 +10,7 @@
             </not>
         </preConditions>
         <createTable tableName="supplier">
-            <column name="supplieid" type="int">
+            <column name="supplierid" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="Supplie_SupplieId" nullable="false"/>
             </column>
             <column name="companyname" type="varchar(40)"/>

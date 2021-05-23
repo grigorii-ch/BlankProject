@@ -10,7 +10,7 @@
             </not>
         </preConditions>
         <createTable tableName="orderproduct">
-            <column name="orderid" type="int">
+            <column name="orderid" type="SERIAL">
                 <constraints foreignKeyName="orderproduct_orderid" referencedTableName="order" referencedColumnNames="orderid"/>
             </column>
             <column name="productid" type="int">
