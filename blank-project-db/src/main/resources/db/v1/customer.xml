@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="v1 create table customer 20.05.2021" author="Grigoriy Chuprynin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="customer"/>
+            </not>
+        </preConditions>
+        <createTable tableName="customer">
+            <column name="customerid" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="customer_customerid" nullable="false"/>
+            </column>
+            <column name="customername" type="varchar(50)"/>
+            <column name="phone" type="varchar(20)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+     </changeSet>
+</databaseChangeLog>
