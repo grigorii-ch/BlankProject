@@ -10,11 +10,11 @@
             </not>
         </preConditions>
         <createTable tableName="orderproduct">
-            <column name="orderid" type="SERIAL">
-                <constraints foreignKeyName="orderproduct_orderid" referencedTableName="order" referencedColumnNames="orderid"/>
+            <column name="order_id" type="SERIAL">
+                <constraints foreignKeyName="orderproduct_order_id" referencedTableName="order" referencedColumnNames="order_id"/>
             </column>
-            <column name="productid" type="int">
-                <constraints foreignKeyName="orderproduct_productid" referencedTableName="product" referencedColumnNames="productid"/>
+            <column name="product_id" type="int">
+                <constraints foreignKeyName="orderproduct_product_id" referencedTableName="product" referencedColumnNames="product_id"/>
             </column>
         </createTable>
     </changeSet>

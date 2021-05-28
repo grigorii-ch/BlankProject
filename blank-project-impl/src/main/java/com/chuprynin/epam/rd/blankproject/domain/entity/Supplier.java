@@ -3,7 +3,6 @@ package com.chuprynin.epam.rd.blankproject.domain.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +19,16 @@ import java.util.List;
 public class Supplier extends EntityDB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "supplierid")
+    @Column(name = "supplier_id")
     private Integer supplierId;
 
-    @Column(name = "companyname")
+    @Column(name = "company_name")
     private String companyName;
 
     @Column(name = "phone")
     private String phone;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "supplier", fetch=FetchType.EAGER, cascade = CascadeType.MERGE )
     private List<Product> products = new ArrayList<>();
 
     public Supplier() {
