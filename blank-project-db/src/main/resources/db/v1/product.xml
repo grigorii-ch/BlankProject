@@ -10,14 +10,14 @@
             </not>
         </preConditions>
         <createTable tableName="product">
-            <column name="productid" type="SERIAL">
-                <constraints primaryKey="true" primaryKeyName="Product_ProductId" nullable="false"/>
+            <column name="product_id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="Product_Product_Id" nullable="false"/>
             </column>
-            <column name="productname" type="varchar(50)"/>
-            <column name="supplierid" type="int">
-                <constraints foreignKeyName="ProductId_SupplierId" referencedTableName="supplier" referencedColumnNames="supplierid"/>
+            <column name="product_name" type="varchar(50)"/>
+            <column name="supplier_id" type="int">
+                <constraints foreignKeyName="ProductId_Supplier_Id" referencedTableName="supplier" referencedColumnNames="supplier_id"/>
             </column>
-            <column name="unitprice" type="decimal(12,2)">
+            <column name="unit_price" type="decimal(12,2)">
                 <constraints nullable="true"/>
             </column>
             <column name="isdiscontined" type="boolean"/>

@@ -1,5 +1,6 @@
 package com.chuprynin.epam.rd.blankproject.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,22 +15,23 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
 @Table(name = "customer", schema = "chuprynin")
 @Access(AccessType.FIELD)
+@ToString(exclude = "orders")
 public class Customer extends EntityDB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customerid")
+    @Column(name = "customer_id")
     private Integer customerId;
 
-    @Column(name = "customername")
+    @Column(name = "customer_name")
     private String customerName;
 
     @Column(name = "phone")
     private String phone;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer", fetch=FetchType.EAGER, cascade = CascadeType.MERGE )
     private List<Order> orders = new ArrayList<>();
 
     public Customer() {

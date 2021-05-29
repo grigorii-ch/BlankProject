@@ -10,10 +10,10 @@
             </not>
         </preConditions>
         <createTable tableName="customer">
-            <column name="customerid" type="SERIAL">
-                <constraints primaryKey="true" primaryKeyName="customer_customerid" nullable="false"/>
+            <column name="customer_id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="customer_customer_id" nullable="false"/>
             </column>
-            <column name="customername" type="varchar(50)"/>
+            <column name="customer_name" type="varchar(50)"/>
             <column name="phone" type="varchar(20)">
                 <constraints nullable="true"/>
             </column>
