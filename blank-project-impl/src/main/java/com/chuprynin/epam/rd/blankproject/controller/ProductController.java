@@ -40,8 +40,7 @@ public class ProductController  extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         log.info("Создание нового продукта");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         try {
             ProductDTO product = getPeoductDTO(req);
@@ -67,8 +66,7 @@ public class ProductController  extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         if (id != null) {
             log.info("Получение продукта");
@@ -107,8 +105,7 @@ public class ProductController  extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         log.info("Обновление всех полей продукта по уникальному идентификатору");
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         if (id != null) {
             try {
@@ -138,8 +135,7 @@ public class ProductController  extends HttpServlet {
         log.info("Удаление продукта");
         PrintWriter out = resp.getWriter();
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         out.write("id = " + id);
         if (id != null) {
             log.debug("Удаление продукта с id - {}", id);
@@ -158,5 +154,14 @@ public class ProductController  extends HttpServlet {
         var requestString = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         var product = mapper.readValue(requestString, ProductDTO.class);
         return product;
+    }
+
+    /**
+     * Установка ContentType = "text/json", CharacterEncoding = "UTF-8" в респонз
+     * @param resp респонз
+     */
+    private void setResponseParameters(HttpServletResponse resp) {
+        resp.setContentType("text/json");
+        resp.setCharacterEncoding("UTF-8");
     }
 }

@@ -39,8 +39,7 @@ public class CustomerController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         log.info("Создание нового покупателя");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         try {
             CustomerDTO customer = getCustomerDTO(req);
@@ -66,8 +65,7 @@ public class CustomerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         if (id != null) {
             log.info("Получение покупателя");
@@ -106,8 +104,7 @@ public class CustomerController extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         log.info("Обновление всех полей покупателя по уникальному идентификатору");
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         if (id != null) {
             try {
@@ -135,10 +132,8 @@ public class CustomerController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         log.info("Удаление покупателя");
-        PrintWriter out = resp.getWriter();
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         if (id != null) {
             log.debug("Удаление покупателя с id - {}", id);
             service.delete(Integer.valueOf(id));
@@ -156,5 +151,14 @@ public class CustomerController extends HttpServlet {
         var requestString = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         var customer = mapper.readValue(requestString, CustomerDTO.class);
         return customer;
+    }
+
+    /**
+     * Установка ContentType = "text/json", CharacterEncoding = "UTF-8" в респонз
+     * @param resp респонз
+     */
+    private void setResponseParameters(HttpServletResponse resp) {
+        resp.setContentType("text/json");
+        resp.setCharacterEncoding("UTF-8");
     }
 }

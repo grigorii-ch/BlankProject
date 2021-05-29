@@ -39,8 +39,7 @@ public class OrderController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         log.info("Создание нового заказа");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         try {
             OrderDTO order = getOrderDTO(req);
@@ -65,8 +64,7 @@ public class OrderController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         if (id != null) {
             log.info("Получение заказа");
@@ -105,8 +103,7 @@ public class OrderController extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         log.info("Обновление всех полей заказов по уникальному идентификатору");
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         if (id != null) {
             try {
@@ -135,8 +132,7 @@ public class OrderController extends HttpServlet {
         log.info("Удаление заказа");
         PrintWriter out = resp.getWriter();
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         out.write("id = " + id);
         if (id != null) {
             log.debug("Удаление покупателя с id - {}", id);
@@ -155,5 +151,14 @@ public class OrderController extends HttpServlet {
         var requestString = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         var order = mapper.readValue(requestString, OrderDTO.class);
         return order;
+    }
+
+    /**
+     * Установка ContentType = "text/json", CharacterEncoding = "UTF-8" в респонз
+     * @param resp респонз
+     */
+    private void setResponseParameters(HttpServletResponse resp) {
+        resp.setContentType("text/json");
+        resp.setCharacterEncoding("UTF-8");
     }
 }

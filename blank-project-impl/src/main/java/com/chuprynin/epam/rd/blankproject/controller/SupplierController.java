@@ -40,8 +40,7 @@ public class SupplierController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         log.info("Создание нового поставщика");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         try {
             SupplierDTO supplier = getSupplierDTO(req);
@@ -66,8 +65,7 @@ public class SupplierController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         if (id != null) {
             log.info("Получение поставщика");
@@ -106,8 +104,7 @@ public class SupplierController extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         log.info("Обновление всех полей поставщиков по уникальному идентификатору");
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         if (id != null) {
             try {
@@ -137,8 +134,7 @@ public class SupplierController extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         log.info("Удаление поставщика");
         String id = req.getParameter("id");
-        resp.setContentType("text/json");
-        resp.setCharacterEncoding("UTF-8");
+        setResponseParameters(resp);
         PrintWriter out = resp.getWriter();
         if (id != null) {
             log.debug("Удаление поставщика с id - {}", id);
@@ -157,5 +153,14 @@ public class SupplierController extends HttpServlet {
         var requestString = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         var supplier = mapper.readValue(requestString, SupplierDTO.class);
         return supplier;
+    }
+
+    /**
+     * Установка ContentType = "text/json", CharacterEncoding = "UTF-8" в респонз
+     * @param resp респонз
+     */
+    private void setResponseParameters(HttpServletResponse resp) {
+        resp.setContentType("text/json");
+        resp.setCharacterEncoding("UTF-8");
     }
 }
