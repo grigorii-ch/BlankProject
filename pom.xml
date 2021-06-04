@@ -26,6 +26,7 @@
         <liquibase.version>4.3.5</liquibase.version>
         <hibernate-core.version>5.4.31.Final</hibernate-core.version>
         <jackson.version>2.6.1</jackson.version>
+        <spring-core.version>5.2.6.RELEASE</spring-core.version>
     </properties>
 
     <dependencyManagement>
@@ -75,6 +76,26 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${spring-core.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

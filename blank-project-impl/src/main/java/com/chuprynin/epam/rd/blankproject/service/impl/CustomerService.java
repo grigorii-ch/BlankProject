@@ -1,10 +1,13 @@
-package com.chuprynin.epam.rd.blankproject.service;
+package com.chuprynin.epam.rd.blankproject.service.impl;
 
 import com.chuprynin.epam.rd.blankproject.domain.entity.Customer;
 import com.chuprynin.epam.rd.blankproject.dto.CustomerDTO;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
+import com.chuprynin.epam.rd.blankproject.locale.ProjectLocale;
 import com.chuprynin.epam.rd.blankproject.repository.CrudRepository;
-
+import com.chuprynin.epam.rd.blankproject.service.CommonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,12 +15,19 @@ import java.util.stream.Collectors;
 /**
  * Сервис для работы с заказчиками
  */
+@Service
 public class CustomerService implements CommonService<CustomerDTO> {
-    private final CrudRepository repository = new CrudRepository();
+
+    @Autowired
+    private CrudRepository repository;
+    @Autowired
+    private ProjectLocale projectLocale;
+
     private final Class clas;
 
     public CustomerService() {
         this.clas = Customer.class;
+
     }
 
     /**

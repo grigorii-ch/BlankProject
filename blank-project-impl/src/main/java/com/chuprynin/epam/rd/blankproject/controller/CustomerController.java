@@ -2,12 +2,15 @@ package com.chuprynin.epam.rd.blankproject.controller;
 
 import com.chuprynin.epam.rd.blankproject.dto.CustomerDTO;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
-import com.chuprynin.epam.rd.blankproject.service.CustomerService;
+import com.chuprynin.epam.rd.blankproject.service.impl.CustomerService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,12 +24,16 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class CustomerController extends HttpServlet {
-    private final CustomerService service;
-    private final ObjectMapper mapper;
+    private CustomerService service;
+    private ObjectMapper mapper;
 
-    public CustomerController() {
-        this.service = new CustomerService();
-        this.mapper = new ObjectMapper();
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        ApplicationContext context = (ApplicationContext) config.getServletContext().getAttribute("applicationContext");
+
+        service = context.getBean(CustomerService.class);
+        mapper = context.getBean(ObjectMapper.class);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.chuprynin.epam.rd.blankproject.dto;
 
 import lombok.Data;
+
 import java.math.BigDecimal;
 
 /**

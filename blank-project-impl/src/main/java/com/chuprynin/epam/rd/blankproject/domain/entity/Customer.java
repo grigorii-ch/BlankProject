@@ -33,8 +33,5 @@ public class Customer extends EntityDB {
     @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch=FetchType.EAGER, cascade = CascadeType.MERGE )
     private List<Order> orders = new ArrayList<>();
-
-    public Customer() {
-    }
 }
 

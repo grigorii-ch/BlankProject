@@ -23,6 +23,10 @@
         <servlet-name>OrderServlet</servlet-name>
         <servlet-class>com.chuprynin.epam.rd.blankproject.controller.OrderController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LocaleServlet</servlet-name>
+        <servlet-class>com.chuprynin.epam.rd.blankproject.controller.LocaleController</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>SupplierServlet</servlet-name>
@@ -40,4 +44,21 @@
         <servlet-name>OrderServlet</servlet-name>
         <url-pattern>/orders</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LocaleServlet</servlet-name>
+        <url-pattern>/locale</url-pattern>
+    </servlet-mapping>
+
+    <context-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+    </context-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>com.chuprynin.epam.rd.blankproject</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>com.chuprynin.epam.rd.blankproject.listener.SpringApplicationContextListener</listener-class>
+    </listener>
 </web-app>
