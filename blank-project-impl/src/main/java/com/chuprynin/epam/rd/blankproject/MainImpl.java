@@ -16,6 +16,7 @@ public class MainImpl {
         CustomerService customerService = context.getBean(CustomerService.class);
         ProjectLocale projectLocale = context.getBean(ProjectLocale.class);
 
+
         System.out.println(customerService.findAll());
         projectLocale.setLocale(Locale.getDefault());
         System.out.println(customerService.findAll());

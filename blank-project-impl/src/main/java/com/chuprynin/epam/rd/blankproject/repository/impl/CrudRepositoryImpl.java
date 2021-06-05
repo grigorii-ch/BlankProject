@@ -34,7 +34,6 @@ public class CrudRepositoryImpl implements CrudRepository {
      *
      * @param entityDB - entity
      */
-
     public void create(EntityDB entityDB) {
         EntityManager em = entityManager.createEntityManager();
         EntityTransaction transaction = em.getTransaction();

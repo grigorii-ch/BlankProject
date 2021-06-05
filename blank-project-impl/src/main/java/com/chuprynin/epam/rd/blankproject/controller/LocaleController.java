@@ -16,9 +16,6 @@ import java.util.Locale;
  */
 public class LocaleController extends HttpServlet {
     private ProjectLocale projectLocale;
-    private final String RU_LOCALE = "Ru";
-    private final String EN_LOCALE = "En";
-
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -35,10 +32,10 @@ public class LocaleController extends HttpServlet {
         String requestlocale = req.getParameter("locale");
         PrintWriter out = resp.getWriter();
         out.println(String.format("Текущая локализация %s", projectLocale.toString()));
-        if (requestlocale.equals(RU_LOCALE)) {
+        if (requestlocale.equals(projectLocale.getRu_locale())) {
             projectLocale.setLocale(Locale.getDefault());
             out.println(String.format("Установленна локализация %s", projectLocale.toString()));
-        } else if (requestlocale.equals(EN_LOCALE)) {
+        } else if (requestlocale.equals(projectLocale.getEn_locale())) {
             projectLocale.setLocale(Locale.ENGLISH);
             out.println(String.format("Установленна локализация %s", projectLocale.toString()));
         } else {

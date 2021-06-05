@@ -27,7 +27,6 @@ public class CustomerService implements CommonService<CustomerDTO> {
 
     public CustomerService() {
         this.clas = Customer.class;
-
     }
 
     /**

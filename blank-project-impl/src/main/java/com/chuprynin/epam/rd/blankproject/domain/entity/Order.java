@@ -1,9 +1,8 @@
 package com.chuprynin.epam.rd.blankproject.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,11 +12,9 @@ import java.util.Set;
 /**
  * Описание таблицы order
  */
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "order", schema = "chuprynin")
-@Access(AccessType.FIELD)
 @ToString(exclude = "customer")
 public class Order extends EntityDB {
     @Id
@@ -38,6 +35,7 @@ public class Order extends EntityDB {
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE )
     @JsonIgnore
     @JoinTable (

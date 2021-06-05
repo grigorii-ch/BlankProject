@@ -1,8 +1,7 @@
 package com.chuprynin.epam.rd.blankproject.domain.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -11,11 +10,9 @@ import java.util.Set;
 /**
  * Описание таблицы product
  */
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "product", schema = "chuprynin")
-@Access(AccessType.FIELD)
 @ToString(exclude = "supplier")
 public class Product extends EntityDB {
     @Id

@@ -14,6 +14,8 @@ import java.util.Locale;
 @Component
 public class ProjectLocale {
     private Locale locale;
+    private final String ru_locale = "Ru";
+    private final String en_locale = "En";
 
     public ProjectLocale() {
         this.locale = Locale.ENGLISH;
