@@ -1,11 +1,13 @@
-package com.chuprynin.epam.rd.blankproject.service;
+package com.chuprynin.epam.rd.blankproject.service.impl;
 
 import com.chuprynin.epam.rd.blankproject.domain.entity.*;
 import com.chuprynin.epam.rd.blankproject.dto.SupplierDTO;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
 import com.chuprynin.epam.rd.blankproject.repository.CrudRepository;
+import com.chuprynin.epam.rd.blankproject.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,8 +16,10 @@ import java.util.stream.Collectors;
  * Сервис для работы с поставщиками
  */
 @Slf4j
+@Service
 public class SupplierService implements CommonService<SupplierDTO> {
-    private final CrudRepository repository = new CrudRepository();
+    @Autowired
+    private CrudRepository repository;
     private final Class clas;
 
     public SupplierService() {

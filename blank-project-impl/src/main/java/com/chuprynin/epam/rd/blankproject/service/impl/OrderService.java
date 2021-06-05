@@ -1,4 +1,4 @@
-package com.chuprynin.epam.rd.blankproject.service;
+package com.chuprynin.epam.rd.blankproject.service.impl;
 
 import com.chuprynin.epam.rd.blankproject.domain.entity.Customer;
 import com.chuprynin.epam.rd.blankproject.domain.entity.EntityDB;
@@ -7,7 +7,9 @@ import com.chuprynin.epam.rd.blankproject.domain.entity.Product;
 import com.chuprynin.epam.rd.blankproject.dto.OrderDTO;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
 import com.chuprynin.epam.rd.blankproject.repository.CrudRepository;
-
+import com.chuprynin.epam.rd.blankproject.service.CommonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -17,8 +19,10 @@ import java.util.stream.Collectors;
 /**
  * Сервис для работы с заказами
  */
+@Service
 public class OrderService implements CommonService<OrderDTO> {
-    private final CrudRepository repository = new CrudRepository();
+    @Autowired
+    private CrudRepository repository;
     private final Class clas;
 
     public OrderService() {

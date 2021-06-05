@@ -1,4 +1,4 @@
-package com.chuprynin.epam.rd.blankproject.service;
+package com.chuprynin.epam.rd.blankproject.service.impl;
 
 import com.chuprynin.epam.rd.blankproject.domain.entity.EntityDB;
 import com.chuprynin.epam.rd.blankproject.domain.entity.Product;
@@ -6,7 +6,9 @@ import com.chuprynin.epam.rd.blankproject.domain.entity.Supplier;
 import com.chuprynin.epam.rd.blankproject.dto.ProductDTO;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
 import com.chuprynin.epam.rd.blankproject.repository.CrudRepository;
-
+import com.chuprynin.epam.rd.blankproject.service.CommonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,8 +16,10 @@ import java.util.stream.Collectors;
 /**
  * Сервис для работы с продуктом
  */
+@Service
 public class ProductService implements CommonService<ProductDTO> {
-    private final CrudRepository repository = new CrudRepository();
+    @Autowired
+    private CrudRepository repository;
     private final Class clas;
 
     public ProductService() {
