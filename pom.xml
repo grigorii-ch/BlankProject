@@ -22,11 +22,13 @@
         <logback-classic.version>1.2.3</logback-classic.version>
         <junit-jupiter-engine.version>5.4.0</junit-jupiter-engine.version>
         <mockito-all.version>1.8.4</mockito-all.version>
-        <postgresql.version>42.2.20</postgresql.version>
+        <postgresql.version>42.2.21</postgresql.version>
         <liquibase.version>4.3.5</liquibase.version>
         <hibernate-core.version>5.4.31.Final</hibernate-core.version>
-        <jackson.version>2.6.1</jackson.version>
+        <jackson.version>2.9.2</jackson.version>
         <spring-core.version>5.2.6.RELEASE</spring-core.version>
+        <spring-data-jpa.version>2.2.7.RELEASE</spring-data-jpa.version>
+        <javax.servlet-api.version>4.0.0</javax.servlet-api.version>
     </properties>
 
     <dependencyManagement>
@@ -77,6 +79,7 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
+            <!-- Spring Core -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
@@ -87,15 +90,23 @@
                 <artifactId>spring-context</artifactId>
                 <version>${spring-core.version}</version>
             </dependency>
+            <!-- Spring Data -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>${spring-data-jpa.version}</version>
+            </dependency>
+            <!-- Spring Web MVC -->
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
+                <artifactId>spring-webmvc</artifactId>
                 <version>${spring-core.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-tx</artifactId>
-                <version>${spring-core.version}</version>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet-api.version}</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -178,6 +189,19 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
             </plugin>
          </plugins>
     </build>

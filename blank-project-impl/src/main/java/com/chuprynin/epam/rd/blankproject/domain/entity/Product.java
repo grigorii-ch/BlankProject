@@ -1,8 +1,8 @@
 package com.chuprynin.epam.rd.blankproject.domain.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -11,12 +11,12 @@ import java.util.Set;
 /**
  * Описание таблицы product
  */
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "product", schema = "chuprynin")
 @Access(AccessType.FIELD)
-@ToString(exclude = "supplier")
+@ToString(exclude = "supplier,orders")
+@EqualsAndHashCode(exclude = "orders")
 public class Product extends EntityDB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +36,7 @@ public class Product extends EntityDB {
     @Column(name = "isdiscontined")
     private boolean isdiscontined;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "products", fetch=FetchType.EAGER)
     private Set<Order> orders = new HashSet<>();
 

@@ -1,9 +1,8 @@
 package com.chuprynin.epam.rd.blankproject.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,8 +12,7 @@ import java.util.Set;
 /**
  * Описание таблицы order
  */
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "order", schema = "chuprynin")
 @Access(AccessType.FIELD)
