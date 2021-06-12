@@ -1,6 +1,7 @@
 package com.chuprynin.epam.rd.blankproject.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,8 +14,7 @@ import java.util.List;
  * Описание таблицы customer
  */
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "customer", schema = "chuprynin")
 @Access(AccessType.FIELD)
 @ToString(exclude = "orders")
