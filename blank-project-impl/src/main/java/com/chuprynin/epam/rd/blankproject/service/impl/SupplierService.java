@@ -1,58 +1,50 @@
 package com.chuprynin.epam.rd.blankproject.service.impl;
 
 import com.chuprynin.epam.rd.blankproject.domain.entity.*;
-import com.chuprynin.epam.rd.blankproject.dto.SupplierDTO;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
-import com.chuprynin.epam.rd.blankproject.repository.CrudRepository;
+import com.chuprynin.epam.rd.blankproject.repository.SupplierRepository;
 import com.chuprynin.epam.rd.blankproject.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Сервис для работы с поставщиками
  */
 @Slf4j
 @Service
-public class SupplierService implements CommonService<SupplierDTO> {
-    @Autowired
-    private CrudRepository repository;
-    private final Class clas;
+public class SupplierService implements CommonService<Supplier> {
+    private static final String ERR_MESSAGE = "Не найдены данные в таблице Supplier по ID = %s";
 
-    public SupplierService() {
-        this.clas = Supplier.class;
-    }
+    @Autowired
+    private SupplierRepository repository;
 
     /**
      * Создание поставщика
      *
-     * @param dto
+     * @param entity Supplier
+     * @return Supplier
      */
-    public void create(SupplierDTO dto) {
-        Supplier entity = new Supplier();
-        entity.setPhone(dto.getPhone());
-        entity.setCompanyName(dto.getCompanyName());
-
-        repository.create(entity);
+    public Supplier create(Supplier entity) {
+        return repository.save(entity);
     }
 
     /**
      * Поиск поставщика по id
      *
      * @param id - идентификатор
-     * @return - dto
+     * @return - Supplier
      * @throws DataNotFound - данные не найдены
      */
-    public SupplierDTO findById(Integer id) {
-        Optional result = repository.findById(clas, id);
+    public Supplier findById(Integer id) {
+        Optional<Supplier> result = repository.findById(id);
         if (result.isPresent()) {
-            Supplier entity = (Supplier) result.get();
-            return getSupplierDTO(entity);
+            return result.get();
         } else {
-            throw new DataNotFound(String.format("Не найдены данные в таблице Supplier по ID = %s", id));
+            throw new DataNotFound(String.format(ERR_MESSAGE, id));
         }
     }
 
@@ -61,26 +53,22 @@ public class SupplierService implements CommonService<SupplierDTO> {
      *
      * @return List<CustomerDTO>
      */
-    public List<SupplierDTO> findAll() {
-        return repository.findAll(clas).stream()
-                .map(obj -> getSupplierDTO((Supplier) obj))
-                .collect(Collectors.toList());
+    public List<Supplier> findAll() {
+        return repository.findAll();
     }
 
     /**
      * Обновление поставщика
      *
-     * @param dto - dto
+     * @param supplier - Supplier
+     * @return Supplier
      */
-    public void update(SupplierDTO dto) throws DataNotFound {
-        Optional result = repository.findById(clas, dto.getSupplierId());
+    public Supplier update(Supplier supplier) throws DataNotFound {
+        Optional<Supplier> result = repository.findById(supplier.getSupplierId());
         if (result.isPresent()) {
-            Supplier entity = (Supplier) result.get();
-            entity.setPhone(dto.getPhone());
-            entity.setCompanyName(dto.getCompanyName());
-            repository.update(entity);
+            return repository.save(supplier);
         } else {
-            throw new DataNotFound(String.format("Не найдены данные в таблице Supplier по ID = %s", dto.getSupplierId()));
+            throw new DataNotFound(String.format(ERR_MESSAGE, supplier.getSupplierId()));
         }
     }
 
@@ -90,21 +78,8 @@ public class SupplierService implements CommonService<SupplierDTO> {
      * @param id - идентификатор
      */
     public void delete(Integer id) {
-        repository.delete(clas, id);
+        repository.deleteById(id);
     }
 
-    /**
-     * Метод конвертации entity в CustomerDTO
-     *
-     * @param entity Supplier
-     * @return SupplierDTO
-     */
-    private SupplierDTO getSupplierDTO(Supplier entity) {
-        SupplierDTO dto = new SupplierDTO();
-        dto.setSupplierId(entity.getSupplierId());
-        dto.setPhone(entity.getPhone());
-        dto.setCompanyName(entity.getCompanyName());
-        return dto;
-    }
 }
 

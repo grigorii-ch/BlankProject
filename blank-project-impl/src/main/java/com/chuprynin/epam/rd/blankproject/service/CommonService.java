@@ -1,5 +1,7 @@
 package com.chuprynin.epam.rd.blankproject.service;
 
+import com.chuprynin.epam.rd.blankproject.domain.entity.Supplier;
+
 import java.util.List;
 
 /**
@@ -8,13 +10,13 @@ import java.util.List;
  * @param <T>
  */
 public interface CommonService<T> {
-    void create(T dto);
+    T create(T entity);
 
     T findById(Integer id);
 
     List<T> findAll();
 
-    void update(T dto);
+    T update(T entity);
 
     void delete(Integer id);
 }

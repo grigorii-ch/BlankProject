@@ -1,59 +1,46 @@
 package com.chuprynin.epam.rd.blankproject.service.impl;
 
 import com.chuprynin.epam.rd.blankproject.domain.entity.Customer;
-import com.chuprynin.epam.rd.blankproject.dto.CustomerDTO;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
-import com.chuprynin.epam.rd.blankproject.locale.ProjectLocale;
-import com.chuprynin.epam.rd.blankproject.repository.CrudRepository;
+import com.chuprynin.epam.rd.blankproject.repository.CustomerRepository;
 import com.chuprynin.epam.rd.blankproject.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Сервис для работы с заказчиками
  */
 @Service
-public class CustomerService implements CommonService<CustomerDTO> {
+public class CustomerService implements CommonService<Customer> {
 
     @Autowired
-    private CrudRepository repository;
-    @Autowired
-    private ProjectLocale projectLocale;
-
-    private final Class clas;
-
-    public CustomerService() {
-        this.clas = Customer.class;
-
-    }
+    private CustomerRepository repository;
 
     /**
      * Создание заказчика
      *
-     * @param dto
+     * @param entity Customer
+     * @return Customer
      */
-    public void create(CustomerDTO dto) {
-        Customer entity = new Customer();
-        entity.setPhone(dto.getPhone());
-        entity.setCustomerName(dto.getCustomerName());
-        repository.create(entity);
+    public Customer create(Customer entity) {
+        return repository.save(entity);
     }
 
     /**
      * Поиск заказчика по id
      *
-     * @param id - идентификатор
-     * @return - dto
-     * @throws DataNotFound - данные не найдены
+     * @param id идентификатор
+     * @return Customer
+     * @throws DataNotFound
      */
-    public CustomerDTO findById(Integer id) throws DataNotFound {
-        Optional result = repository.findById(clas, id);
+    public Customer findById(Integer id) throws DataNotFound {
+        Optional<Customer> result = repository.findById(id);
         if (result.isPresent()) {
-            Customer entity = (Customer) result.get();
-            return getCustomerDTO(entity);
+            return result.get();
         } else {
             throw new DataNotFound(String.format("Не найдены данные в таблице Customer по ID = %s", id));
         }
@@ -64,26 +51,22 @@ public class CustomerService implements CommonService<CustomerDTO> {
      *
      * @return List<CustomerDTO>
      */
-    public List<CustomerDTO> findAll() {
-        return repository.findAll(clas).stream()
-                .map(obj -> getCustomerDTO((Customer) obj))
-                .collect(Collectors.toList());
+    public List<Customer> findAll() {
+        return new ArrayList<>(repository.findAll());
     }
 
     /**
      * Обновление заказчика
      *
-     * @param dto - dto
+     * @param entity Customer
+     * @return Customer
      */
-    public void update(CustomerDTO dto) {
-        Optional result = repository.findById(clas, dto.getCustomerId());
+    public Customer update(Customer entity) {
+        Optional<Customer> result = repository.findById(entity.getCustomerId());
         if (result.isPresent()) {
-            Customer entity = (Customer) result.get();
-            entity.setPhone(dto.getPhone());
-            entity.setCustomerName(dto.getCustomerName());
-            repository.update(entity);
+            return repository.save(entity);
         } else {
-            throw new DataNotFound(String.format("Не найдены данные в таблице Supplier по ID = %s", dto.getCustomerId()));
+            throw new DataNotFound(String.format("Не найдены данные в таблице Supplier по ID = %s", entity.getCustomerId()));
         }
     }
 
@@ -93,20 +76,7 @@ public class CustomerService implements CommonService<CustomerDTO> {
      * @param id - идентификатор
      */
     public void delete(Integer id) {
-        repository.delete(clas, id);
-    }
-
-    /**
-     * Метод конвертации entity в CustomerDTO
-     *
-     * @param entity Customer
-     * @return CustomerDTO
-     */
-    private CustomerDTO getCustomerDTO(Customer entity) {
-        CustomerDTO dto = new CustomerDTO();
-        dto.setCustomerId(entity.getCustomerId());
-        dto.setCustomerName(entity.getCustomerName());
-        dto.setPhone(entity.getPhone());
-        return dto;
+        Optional<Customer> result = repository.findById(id);
+        result.ifPresent(customer -> repository.delete(customer));
     }
 }

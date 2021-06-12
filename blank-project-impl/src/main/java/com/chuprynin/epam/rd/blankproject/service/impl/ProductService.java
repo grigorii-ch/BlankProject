@@ -1,71 +1,49 @@
 package com.chuprynin.epam.rd.blankproject.service.impl;
 
-import com.chuprynin.epam.rd.blankproject.domain.entity.EntityDB;
 import com.chuprynin.epam.rd.blankproject.domain.entity.Product;
-import com.chuprynin.epam.rd.blankproject.domain.entity.Supplier;
-import com.chuprynin.epam.rd.blankproject.dto.ProductDTO;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
-import com.chuprynin.epam.rd.blankproject.repository.CrudRepository;
+import com.chuprynin.epam.rd.blankproject.repository.ProductRepository;
 import com.chuprynin.epam.rd.blankproject.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Сервис для работы с продуктом
  */
 @Service
-public class ProductService implements CommonService<ProductDTO> {
-    @Autowired
-    private CrudRepository repository;
-    private final Class clas;
+public class ProductService implements CommonService<Product> {
+    private static final String ERR_MESSAGE = "Не найдены данные в таблице Product по ID = %s";
 
-    public ProductService() {
-        this.clas = Product.class;
-    }
+    @Autowired
+    private ProductRepository repository;
 
     /**
      * Создание продукта
      *
-     * @param dto
+     * @param product Product
+     * @return Product
+     * @throws DataNotFound данные не найдены
      */
-    public void create(ProductDTO dto) throws DataNotFound {
-        Product entity = new Product();
-        entity.setProductName(dto.getProductName());
-        entity.setIsdiscontined(dto.isIsdiscontined());
-        entity.setIsdiscontined(dto.isIsdiscontined());
-        entity.setProductId(dto.getProductId());
-        Optional<EntityDB> optionalSupplier = repository.findById(Supplier.class, dto.getSupplierId());
-        if (optionalSupplier.isPresent()) {
-            Supplier supplier = (Supplier) optionalSupplier.get();
-            entity.setSupplier(supplier);
-        } else {
-            throw new DataNotFound(
-                    String.format(
-                            "При операции создания заказа не был найден Заказчик c идентификатором = %s",
-                            dto.getSupplierId()
-                    )
-            );
-        }
-        repository.create(entity);
+    public Product create(Product product) throws DataNotFound {
+        return repository.save(product);
     }
 
     /**
      * Поиск продукта по id
      *
      * @param id - идентификатор
-     * @return - dto
-     * @throws DataNotFound
+     * @return - Product
+     * @throws DataNotFound данные не найдены
      */
-    public ProductDTO findById(Integer id) {
-        Optional result = repository.findById(clas, id);
+    public Product findById(Integer id) {
+        Optional<Product> result = repository.findById(id);
         if (result.isPresent()) {
-            Product entity = (Product) result.get();
-            return getProductDTO(entity);
+            return result.get();
         } else {
-            throw new DataNotFound(String.format("Не найдены данные в таблице Product по ID = %s", id));
+            throw new DataNotFound(String.format(ERR_MESSAGE, id));
         }
     }
 
@@ -74,55 +52,30 @@ public class ProductService implements CommonService<ProductDTO> {
      *
      * @return List<ProductDTO>
      */
-    public List<ProductDTO> findAll() {
-        return repository.findAll(clas).stream()
-                .map(obj -> getProductDTO((Product) obj))
-                .collect(Collectors.toList());
+    public List<Product> findAll() {
+        return repository.findAll();
     }
 
     /**
      * Обновление заказчика
-     *
-     * @param dto - dto
+     * @param product - идентификатор
+     * @return - Product
      */
-    public void update(ProductDTO dto) {
-        Optional result = repository.findById(clas, dto.getProductId());
+    public Product update(Product product) {
+        Optional<Product> result = repository.findById(product.getProductId());
         if (result.isPresent()) {
-            Product entity = (Product) result.get();
-            entity.setUnitprice(dto.getUnitprice());
-            entity.setProductName(dto.getProductName());
-            entity.setIsdiscontined(dto.isIsdiscontined());
-            entity.setProductId(dto.getProductId());
-            repository.update(entity);
+            return repository.save(product);
         } else {
-            throw new DataNotFound(String.format("Не найдены данные в таблице Product по ID = %s", dto.getProductId()));
+            throw new DataNotFound(String.format(ERR_MESSAGE, product.getProductId()));
         }
     }
 
     /**
      * Удаление продукта
      *
-     * @param id
+     * @param id идентификатор
      */
     public void delete(Integer id) {
-        repository.delete(clas, id);
-    }
-
-    /**
-     * Метод конвертации entity в ProductDTO
-     *
-     * @param entity - Product
-     * @return - ProductDTO
-     */
-    private ProductDTO getProductDTO(Product entity) {
-        ProductDTO dto = new ProductDTO();
-        dto.setProductName(entity.getProductName());
-        dto.setProductId(entity.getProductId());
-        dto.setIsdiscontined(entity.isIsdiscontined());
-        dto.setUnitprice(entity.getUnitprice());
-        if (entity.getSupplier() != null) {
-            dto.setSupplierId(entity.getSupplier().getSupplierId());
-        }
-        return dto;
+        repository.deleteById(id);
     }
 }

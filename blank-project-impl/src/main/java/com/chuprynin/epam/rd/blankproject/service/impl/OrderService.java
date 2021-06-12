@@ -1,76 +1,33 @@
 package com.chuprynin.epam.rd.blankproject.service.impl;
 
-import com.chuprynin.epam.rd.blankproject.domain.entity.Customer;
-import com.chuprynin.epam.rd.blankproject.domain.entity.EntityDB;
 import com.chuprynin.epam.rd.blankproject.domain.entity.Order;
-import com.chuprynin.epam.rd.blankproject.domain.entity.Product;
-import com.chuprynin.epam.rd.blankproject.dto.OrderDTO;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
-import com.chuprynin.epam.rd.blankproject.repository.CrudRepository;
+import com.chuprynin.epam.rd.blankproject.repository.OrderRepository;
 import com.chuprynin.epam.rd.blankproject.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Сервис для работы с заказами
  */
 @Service
-public class OrderService implements CommonService<OrderDTO> {
-    @Autowired
-    private CrudRepository repository;
-    private final Class clas;
+public class OrderService implements CommonService<Order> {
+    private static final String ERR_MESSAGE = "Не найдены данные в таблице Order по ID = %s";
 
-    public OrderService() {
-        this.clas = Order.class;
-    }
+    @Autowired
+    private OrderRepository repository;
 
     /**
      * Создание заказа
      *
-     * @param dto
+     * @param order Order
+     * @return Order
      */
-    public void create(OrderDTO dto) {
-        Order entity = new Order();
-        entity.setOrderDate(dto.getOrderDate());
-        entity.setOrderNumber(dto.getOrderNumber());
-        entity.setTotalAmount(dto.getTotalAmount());
-        entity.setOrderId(dto.getOrderId());
-        Optional<EntityDB> optionalCustomer = repository.findById(Customer.class, dto.getCustomerId());
-        if (optionalCustomer.isPresent()) {
-            Customer customer = (Customer) optionalCustomer.get();
-            entity.setCustomer(customer);
-        } else {
-            throw new DataNotFound(
-                    String.format(
-                            "При операции создания заказа не был найден Заказчик c идентификатором = %s",
-                            dto.getCustomerId()
-                    )
-            );
-        }
-
-        Set<Product> products = new HashSet<>();
-        dto.getProducts().forEach(productId -> {
-            Optional<EntityDB> optionalProduct = repository.findById(Product.class, productId);
-            if (optionalProduct.isPresent()) {
-                Product product = (Product) optionalProduct.get();
-                products.add(product);
-
-            } else {
-                throw new DataNotFound(
-                        String.format(
-                                "При операции создания заказа не был найден продукт c идентификатором = %s",
-                                dto.getCustomerId()
-                        )
-                );
-            }
-        });
-        entity.setProducts(products);
-        repository.create(entity);
+    public Order create(Order order) {
+        return repository.save(order);
     }
 
     /**
@@ -79,71 +36,45 @@ public class OrderService implements CommonService<OrderDTO> {
      * @param id - идентификатор
      * @return - dto
      */
-    public OrderDTO findById(Integer id) {
-        Optional result = repository.findById(clas, id);
+    public Order findById(Integer id) {
+        Optional<Order> result = repository.findById(id);
         if (result.isPresent()) {
-            Order entity = (Order) result.get();
-            return getOrderDTO(entity);
+            return result.get();
         } else {
-            throw new DataNotFound(String.format("Не найдены данные в таблице Order по ID = %s", id));
+            throw new DataNotFound(String.format(ERR_MESSAGE, id));
         }
     }
 
     /**
-     * Найти всех заказчиков
+     * Найти все заказы
      *
      * @return List<OrderDTO>
      */
-    public List<OrderDTO> findAll() {
-        return repository.findAll(clas).stream()
-                .map(obj -> getOrderDTO((Order) obj))
-                .collect(Collectors.toList());
+    public List<Order> findAll() {
+        return repository.findAll();
     }
 
     /**
      * Обновление заказа
      *
-     * @param dto - dto
+     * @param order Order
+     * @return List<OrderDTO>
      */
-    public void update(OrderDTO dto) {
-        Optional result = repository.findById(clas, dto.getOrderId());
+    public Order update(Order order) {
+        Optional<Order> result = repository.findById(order.getOrderId());
         if (result.isPresent()) {
-            Order entity = (Order) result.get();
-            entity.setOrderId(dto.getOrderId());
-            entity.setOrderDate(dto.getOrderDate());
-            entity.setOrderNumber(dto.getOrderNumber());
-            entity.setTotalAmount(dto.getTotalAmount());
-            repository.update(entity);
+            return repository.save(order);
         } else {
-            throw new DataNotFound(String.format("Не найдены данные в таблице Order по ID = %s", dto.getOrderId()));
+            throw new DataNotFound(String.format(ERR_MESSAGE, order.getOrderId()));
         }
     }
 
     /**
      * Удаление заказа
      *
-     * @param id
+     * @param id идентификатор
      */
     public void delete(Integer id) {
-        repository.delete(clas, id);
+        repository.deleteById(id);
     }
-
-    /**
-     * Метод конвертации entity в OrderDTO
-     *
-     * @param entity - Order
-     * @return - OrderDTO
-     */
-    private OrderDTO getOrderDTO(Order entity) {
-        OrderDTO dto = new OrderDTO();
-        dto.setOrderId(entity.getOrderId());
-        dto.setOrderDate(entity.getOrderDate());
-        dto.setOrderNumber(entity.getOrderNumber());
-        dto.setTotalAmount(entity.getTotalAmount());
-        if (entity.getCustomer() != null) {
-            dto.setCustomerId(entity.getCustomer().getCustomerId());
-        }
-        return dto;
-    }
-
 }
