@@ -1,5 +1,6 @@
 package com.chuprynin.epam.rd.blankproject.service.impl;
 
+import com.chuprynin.epam.rd.blankproject.annotation.Logging;
 import com.chuprynin.epam.rd.blankproject.domain.entity.Order;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
 import com.chuprynin.epam.rd.blankproject.repository.OrderRepository;
@@ -36,6 +37,7 @@ public class OrderService implements CommonService<Order> {
      * @param id - идентификатор
      * @return - dto
      */
+    @Logging
     public Order findById(Integer id) {
         Optional<Order> result = repository.findById(id);
         if (result.isPresent()) {

@@ -35,7 +35,6 @@ public class CustomerResourceImpl implements CustomerResource {
      */
     @Override
     public CustomerDTO create(@RequestBody CustomerDTO customer) {
-        customer.setCustomerId(null);
         log.debug("Создание покупателя {}", customer);
         return customerToCustomerDTOConverter.convert(
                 service.create(customerDTOToCustomerConverter.convert(customer))

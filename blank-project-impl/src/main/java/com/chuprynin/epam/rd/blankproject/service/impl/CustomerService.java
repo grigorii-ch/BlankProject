@@ -1,9 +1,12 @@
 package com.chuprynin.epam.rd.blankproject.service.impl;
 
+import com.chuprynin.epam.rd.blankproject.annotation.Logging;
 import com.chuprynin.epam.rd.blankproject.domain.entity.Customer;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
 import com.chuprynin.epam.rd.blankproject.repository.CustomerRepository;
 import com.chuprynin.epam.rd.blankproject.service.CommonService;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +18,11 @@ import java.util.Optional;
  * Сервис для работы с заказчиками
  */
 @Service
+@RequiredArgsConstructor
 public class CustomerService implements CommonService<Customer> {
 
     @Autowired
-    private CustomerRepository repository;
+    private final CustomerRepository repository;
 
     /**
      * Создание заказчика
@@ -37,6 +41,7 @@ public class CustomerService implements CommonService<Customer> {
      * @return Customer
      * @throws DataNotFound
      */
+    @Logging
     public Customer findById(Integer id) throws DataNotFound {
         Optional<Customer> result = repository.findById(id);
         if (result.isPresent()) {

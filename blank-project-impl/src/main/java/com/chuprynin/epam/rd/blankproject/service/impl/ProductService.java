@@ -1,5 +1,6 @@
 package com.chuprynin.epam.rd.blankproject.service.impl;
 
+import com.chuprynin.epam.rd.blankproject.annotation.Logging;
 import com.chuprynin.epam.rd.blankproject.domain.entity.Product;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
 import com.chuprynin.epam.rd.blankproject.repository.ProductRepository;
@@ -38,6 +39,7 @@ public class ProductService implements CommonService<Product> {
      * @return - Product
      * @throws DataNotFound данные не найдены
      */
+    @Logging
     public Product findById(Integer id) {
         Optional<Product> result = repository.findById(id);
         if (result.isPresent()) {

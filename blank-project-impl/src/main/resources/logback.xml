@@ -8,11 +8,7 @@
         </layout>
     </appender>
 
-    <logger name="com.chuprynin.epam.rd" level="debug" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-    </logger>
-
-    <logger name="org.hibernate" level="OFF" additivity="false">
+    <logger name="com.chuprynin.epam.rd" level="debug" >
         <appender-ref ref="CONSOLE"/>
     </logger>
 </configuration>

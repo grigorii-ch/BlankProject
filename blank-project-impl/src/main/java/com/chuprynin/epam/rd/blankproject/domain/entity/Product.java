@@ -13,7 +13,7 @@ import java.util.Set;
  */
 @Data
 @Entity
-@Table(name = "product", schema = "chuprynin")
+@Table(name = "product")
 @Access(AccessType.FIELD)
 @ToString(exclude = "supplier,orders")
 @EqualsAndHashCode(exclude = "orders")

@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    username: usr
+    password: pass
+    url: jdbc:postgresql://localhost:5432/epamcourses?currentSchema=chuprynin
+
+logging:
+  isActive: true

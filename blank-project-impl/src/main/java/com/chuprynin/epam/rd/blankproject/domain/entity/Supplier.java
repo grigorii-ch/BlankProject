@@ -1,8 +1,6 @@
 package com.chuprynin.epam.rd.blankproject.domain.entity;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import javax.persistence.*;
 import java.util.ArrayList;
