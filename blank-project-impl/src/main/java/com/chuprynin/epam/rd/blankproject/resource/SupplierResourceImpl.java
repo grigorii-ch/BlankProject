@@ -78,7 +78,7 @@ public class SupplierResourceImpl implements SupplierResource {
     public SupplierDTO update(@RequestBody SupplierDTO supplier) {
         log.debug("Обновление поставщика {}", supplier);
         return supplierToSupplierDTOConverter.convert(
-                service.create(supplierDTOToSupplierConverter.convert(supplier))
+                service.update(supplierDTOToSupplierConverter.convert(supplier))
         );
     }
 
