@@ -35,7 +35,6 @@ public class SupplierResourceImpl implements SupplierResource {
      */
     @Override
     public SupplierDTO create(@RequestBody SupplierDTO supplier) {
-        supplier.setSupplierId(null);
         log.debug("Создание нового поставщика");
         return supplierToSupplierDTOConverter.convert(
                 service.create(supplierDTOToSupplierConverter.convert(supplier))
@@ -79,7 +78,7 @@ public class SupplierResourceImpl implements SupplierResource {
     public SupplierDTO update(@RequestBody SupplierDTO supplier) {
         log.debug("Обновление поставщика {}", supplier);
         return supplierToSupplierDTOConverter.convert(
-                service.create(supplierDTOToSupplierConverter.convert(supplier))
+                service.update(supplierDTOToSupplierConverter.convert(supplier))
         );
     }
 

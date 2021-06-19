@@ -14,7 +14,7 @@ import java.util.Set;
  */
 @Data
 @Entity
-@Table(name = "order", schema = "chuprynin")
+@Table(name = "\"order\"")
 @Access(AccessType.FIELD)
 @ToString(exclude = "customer")
 public class Order extends EntityDB {

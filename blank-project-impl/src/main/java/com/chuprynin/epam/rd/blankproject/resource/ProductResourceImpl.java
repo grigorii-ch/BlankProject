@@ -39,7 +39,6 @@ public class ProductResourceImpl implements ProductResource {
      */
     @Override
     public ProductDTO create(@RequestBody ProductDTO product) {
-        product.setProductId(null);
         log.debug("Создание нового продукта");
         return productToProductDTOConverter.convert(service.create(getProductEntity(product)));
     }

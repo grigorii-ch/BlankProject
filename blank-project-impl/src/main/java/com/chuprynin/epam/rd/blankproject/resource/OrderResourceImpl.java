@@ -42,7 +42,6 @@ public class OrderResourceImpl implements OrderResource {
      */
     @Override
     public OrderDTO create(@RequestBody OrderDTO order) {
-        order.setOrderId(null);
         log.debug("Создание нового заказа {}", order);
         return orderToOrderDTOConverter.convert(getOrderEntity(order));
     }

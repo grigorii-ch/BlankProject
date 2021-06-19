@@ -1,5 +1,6 @@
 package com.chuprynin.epam.rd.blankproject.service.impl;
 
+import com.chuprynin.epam.rd.blankproject.annotation.Logging;
 import com.chuprynin.epam.rd.blankproject.domain.entity.*;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
 import com.chuprynin.epam.rd.blankproject.repository.SupplierRepository;
@@ -39,6 +40,7 @@ public class SupplierService implements CommonService<Supplier> {
      * @return - Supplier
      * @throws DataNotFound - данные не найдены
      */
+    @Logging
     public Supplier findById(Integer id) {
         Optional<Supplier> result = repository.findById(id);
         if (result.isPresent()) {
