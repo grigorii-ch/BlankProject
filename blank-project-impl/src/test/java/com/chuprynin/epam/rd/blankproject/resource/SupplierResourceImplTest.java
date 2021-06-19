@@ -3,6 +3,7 @@ package com.chuprynin.epam.rd.blankproject.resource;
 import com.chuprynin.epam.rd.blankproject.domain.entity.Supplier;
 import com.chuprynin.epam.rd.blankproject.dto.SupplierDTO;
 import com.chuprynin.epam.rd.blankproject.service.impl.SupplierService;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,7 +30,7 @@ class SupplierResourceImplTest {
     private MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper mapper;
+    private ObjectMapper mapper;
 
     @MockBean
     private SupplierService supplierService;
@@ -39,18 +41,21 @@ class SupplierResourceImplTest {
      * @throws Exception - ошибка
      */
     @Test
-    void create() throws Exception {
+    public void createSupplierTest() throws Exception {
         SupplierDTO dto = getSupplierDTO();
-
-        Supplier supplier = getSupplier();
+        Supplier supplier = getNewSupplier();
 
         when(supplierService.create(supplier)).thenReturn(supplier);
 
-        mockMvc.perform(
+        MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/supplier")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto))
-        ).andExpect(status().isOk());
+        ).andExpect(status().isOk()).andReturn();
+
+        String ar = result.getResponse().getContentAsString();
+        String er =  mapper.writeValueAsString(dto);
+        Assert.assertEquals(ar,er);
     }
 
     /**
@@ -59,10 +64,16 @@ class SupplierResourceImplTest {
      * @throws Exception - ошибка
      */
     @Test
-    void get() throws Exception {
-        Supplier supplier = new Supplier();
+    public void getSupplierTest() throws Exception {
+        Supplier supplier = getNewSupplier();
+        SupplierDTO dto = getSupplierDTO();
         when(supplierService.findById(1)).thenReturn(supplier);
-        mockMvc.perform(MockMvcRequestBuilders.get("/supplier/1")).andExpect(status().isOk());
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/supplier/1")).andReturn();
+
+        String ar = result.getResponse().getContentAsString();
+        String er =  mapper.writeValueAsString(dto);
+        Assert.assertEquals(ar,er);
     }
 
     /**
@@ -71,17 +82,21 @@ class SupplierResourceImplTest {
      * @throws Exception - ошибка
      */
     @Test
-    void update() throws Exception {
+    public void updateSupplierTest() throws Exception {
         SupplierDTO dto = getSupplierDTO();
-        Supplier supplier = getSupplier();
+        Supplier supplier = getNewSupplier();
 
         when(supplierService.update(supplier)).thenReturn(supplier);
 
-        mockMvc.perform(
+        MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.put("/supplier")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto))
-        ).andExpect(status().isOk());
+        ).andExpect(status().isOk()).andReturn();
+
+        String ar = result.getResponse().getContentAsString();
+        String er =  mapper.writeValueAsString(dto);
+        Assert.assertEquals(ar,er);
     }
 
     /**
@@ -90,7 +105,7 @@ class SupplierResourceImplTest {
      * @throws Exception - ошибка
      */
     @Test
-    void delete() throws Exception {
+    public void deleteSupplierTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/supplier/1")).andExpect(status().isOk());
     }
 
@@ -112,7 +127,7 @@ class SupplierResourceImplTest {
      *
      * @return Supplier
      */
-    private Supplier getSupplier() {
+    private Supplier getNewSupplier() {
         Supplier supplier = new Supplier();
         supplier.setSupplierId(1);
         supplier.setPhone("123");

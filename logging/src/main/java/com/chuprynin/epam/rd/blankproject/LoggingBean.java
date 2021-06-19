@@ -1,7 +1,9 @@
 package com.chuprynin.epam.rd.blankproject;
 
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -18,13 +20,13 @@ public class LoggingBean {
     public void callLogging() {
     }
 
-    @Around(value = "callLogging()")
-    public Object loggingDataTime(ProceedingJoinPoint joinPoint) throws Throwable {
+    @After(value = "callLogging()")
+    public void loggingData(JoinPoint joinPoint) {
         log.debug("Informatin from method - {}", joinPoint.getSignature());
         Arrays.stream(joinPoint.getArgs())
                 .forEach(obj -> {
                     log.debug("Argument type: {}, argument value: {}", obj.getClass().getName(), obj.toString());
                 });
-        return joinPoint.proceed();
+        //return joinPoint.proceed();
     }
 }

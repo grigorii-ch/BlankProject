@@ -28,11 +28,10 @@ class CustomerResourceImplTest {
      * Создание кастомера
      */
     @Test
-    void create() {
+    public void createCustomerTest() {
         Customer customer = new Customer();
         customerService.create(customer);
         Customer savedCustomer = customerService.findById(customer.getCustomerId());
-        System.out.println(savedCustomer.getCustomerId() + " " + customer.getCustomerId());
         Assert.assertEquals(savedCustomer.getCustomerId(), customer.getCustomerId());
     }
 
@@ -40,7 +39,7 @@ class CustomerResourceImplTest {
      * Получение кастомера
      */
     @Test
-    void get() {
+    public void getCustomerTest() {
         Customer customer = new Customer();
         customerService.create(customer);
         Customer savedCustomer = customerService.findById(customer.getCustomerId());
@@ -51,21 +50,20 @@ class CustomerResourceImplTest {
      * Обновление кастомера
      */
     @Test
-    void update() {
+    public void updateCustomerTest() {
         Customer customer = new Customer();
         customerService.create(customer);
         customer.setCustomerName("NewName");
         customerService.update(customer);
         Customer savedCustomer = customerService.findById(customer.getCustomerId());
         Assert.assertEquals(savedCustomer.getCustomerName(), customer.getCustomerName());
-
     }
 
     /**
      * Удаление кастомера
      */
     @Test
-    void delete() {
+    public void deleteCustomerTest() {
         Customer customer = new Customer();
         customerService.create(customer);
         customerService.delete(customer.getCustomerId());
@@ -78,7 +76,7 @@ class CustomerResourceImplTest {
      * Конфигурация для поднятия бина customerService
      */
     @TestConfiguration
-    static class MyCustomerConfiguration {
+    protected static class MyCustomerConfiguration {
         @Bean
         public CustomerService customerService(CustomerRepository repository) {
             return new CustomerService(repository);

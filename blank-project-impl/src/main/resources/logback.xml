@@ -8,7 +8,7 @@
         </layout>
     </appender>
 
-    <logger name="com.chuprynin.epam.rd" level="debug" >
+    <logger name="com.chuprynin.epam.rd" level="all" >
         <appender-ref ref="CONSOLE"/>
     </logger>
 </configuration>

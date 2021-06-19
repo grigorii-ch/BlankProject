@@ -5,6 +5,7 @@ import com.chuprynin.epam.rd.blankproject.domain.entity.Order;
 import com.chuprynin.epam.rd.blankproject.exceptions.DataNotFound;
 import com.chuprynin.epam.rd.blankproject.repository.OrderRepository;
 import com.chuprynin.epam.rd.blankproject.service.CommonService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,12 @@ import java.util.Optional;
  * Сервис для работы с заказами
  */
 @Service
+@RequiredArgsConstructor
 public class OrderService implements CommonService<Order> {
     private static final String ERR_MESSAGE = "Не найдены данные в таблице Order по ID = %s";
 
     @Autowired
-    private OrderRepository repository;
+    private final OrderRepository repository;
 
     /**
      * Создание заказа
