@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * Конфигурация для бина loggingBean
  */
 @Configuration
-@ConditionalOnProperty(prefix = "logging", name = "isActive", havingValue = "true")
+@ConditionalOnProperty(prefix = "logging", name = "enabled", havingValue = "true")
 public class LoggingConfiguration {
     @Bean
     public LoggingBean loggingBean() {

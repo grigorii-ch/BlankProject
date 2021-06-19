@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @DataJpaTest
 @RunWith(SpringRunner.class)
-class OrderResourceImplTest {
+public class OrderResourceImplTest {
 
     @Autowired
     private OrderService orderService;
